@@ -15,9 +15,10 @@ from spotipy.oauth2 import SpotifyClientCredentials
 
 if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"): # School 
     path = "D:/coding/GitHub/a-asen/spotify_project"
-#if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"): # Home
- #   path = "D:/_coding/GitHub/a-asen/spotify_project"
-    
+if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"): # Home
+    path = "D:/_coding/GitHub/a-asen/spotify_project"
+
+
 os.chdir(path)
 print(os.getcwd())
 
