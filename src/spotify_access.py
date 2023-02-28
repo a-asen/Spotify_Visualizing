@@ -33,8 +33,8 @@ sp_client = access_token["Client_ID"]
 sp_secret = access_token["Client_Secret"]
 
 #%%%  Spotify accesss
-sp = spotipy.Spotify(auth_manager=SpotifyClientCredentials(client_id = sp_client,
-                                                           client_secret = sp_secret))
+sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id = sp_client,
+                                                             client_secret = sp_secret))
 
 #%% Get user. 
 my_user = sp.user_playlists("1117238547")
