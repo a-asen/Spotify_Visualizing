@@ -18,7 +18,6 @@ if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"): # School
 if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"): # Home
     path = "D:/_coding/GitHub/a-asen/spotify_project"
 
-
 os.chdir(path)
 print(os.getcwd())
 
@@ -36,13 +35,24 @@ sp_secret = access_token["Client_Secret"]
 sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id = sp_client,
                                                              client_secret = sp_secret))
 
-#%% Get user. 
-my_user = sp.user_playlists("1117238547")
+# %% Get user # no 
+my_user = sp.user_playlists("1117238547") # not full list of user - only public info
 
 my_user.keys()
 my_user["items"][1].keys()
 
 my_user["items"][1]
+
+# %%%
+import spotipy
+from spotipy.oauth2 import SpotifyOAuth
+
+scope = ["user-library-read", "user-read-playback-position", "user-top-read", "user-read-recently-played"]
+test = sp.current_user_recently_played()   
+
+sp = spotipy.Spotify(auth_manager=SpotifyOAuth(scope=scope))
+
+
 
 #%%
 for row in my_user["items"]:
