@@ -23,83 +23,116 @@ os.chdir(path)
 print(os.getcwd())
 
 #%%  Read Keys
-os.path.exists("access")
-
 # Get access token # Read JSON
 with open("access/access_token.json", "r") as f:
     access_token = json.load(f)
 
-sp_client = access_token["Client_ID"]
-sp_secret = access_token["Client_Secret"]
-sp_api_url = "https://api.spotify.com/v1" # we use this cause this is where "GET" responses come from
+sp_client    = access_token["Client_ID"]       # Client ID
+sp_secret    = access_token["Client_Secret"]   # Client Secret
+sp_redirect  = "http://localhost:8888/callback" # Local to grantk access? 
+# sp_scopes  = "user-read-recently-played"  # Scopes
+sp_scopes    = "user-read-playback-state, user-read-currently-playing, user-read-playback-position, user-top-read, user-read-recently-played, playlist-read-private,playlist-read-collaborative"
+# https://developer.spotify.com/documentation/general/guides/authorization/scopes/ 
+# https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
 
-# https://developer.spotify.com/documentation/general/guides/authorization/scopes/
-
-sp_scopes = "user-read-recently-played"  # Scopes
-# [
-
-
-sp_redirect = "http://localhost:8888/callback" # Local to grantk access? 
-OAUTH_AUTHORIZE_URL= 'https://accounts.spotify.com/authorize' # no idea? 
-OAUTH_TOKEN_URL= 'https://accounts.spotify.com/api/token'     # no idear 
-# https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
- 
-
-
-
-["user-read-playback-state", "user-read-currently-playing", 
-             "user-read-playback-position", "user-top-read", "user-read-recently-played"
-             "playlist-read-private", "playlist-read-collaborative"]
-
-# %%  Spotify accesss
+# %%  Spotify General access credentials 
+# This gives us access to public info on Spotify 
+# See below for private related data
 #sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id = sp_client,
- #                                                            client_secret = sp_secret))
+#                                                             client_secret = sp_secret))
+
+# %%   Spotify Authentication
+
+# https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
+sp_user_auth = spotipy.SpotifyOAuth(
+    client_id     = sp_client,    # client ID
+    client_secret = sp_secret,    # Secret
+    redirect_uri  = sp_redirect,  # redirect to....
+    scope         = sp_scopes)    # access scope
+    # I suppose this (redirect_uri) is where the data is being sent to, where 
+    # we access the data?  Therefore it is also a "local" target. 
+    # We might, I guess, put up a server target (https://cross_sync.com:8080/callback) 
+    # to handle responses to bigger databases to make apps.
+        # redirect_uri  = sp_api_url # redirect to spotify API call
+        # Does not work with this code, hence the above
+
+sp_user_auth.get_authorization_code() # Should open the browser
+
+# get_access_token = sp_user_auth.get_access_token() # access token 
+
+# get_auth_url = sp_user_auth.get_authorize_url()() # url response from
+
+# get_auth_response = sp_user_auth.get_auth_response() # get auth response (id?)
+# get_auth_code = sp_user_auth.get_authorization_code()  # get auth code
+
+# sp_user_auth.get_cached_token() # get stored file?
 
 
-# %%
-test = spotipy.SpotifyOAuth(client_id     = sp_client,      # client ID
-                            client_secret = sp_secret,  # Secret
-                            redirect_uri  = sp_redirect,  # redirect to....
-                            scope         = sp_scopes)             # access scope
+# %%  Set the "auth_manager" to our credentials according to the given "auth" access
 
-abd = test.get_access_token()
-test.
+# https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 
-spotipy.oauth2.SpotifyOAuth()
+# We set our access point to "sp" by authorizing with "sp_user_auth" 
+sp = spotipy.Spotify(auth_manager = sp_user_auth)
 
-spotipy.Spotify(auth=())
+# %%  Get Recently Played
 
-test.open_browser()
-test.get_authorize_url()
-test.get_auth_response()
+# See documentation:
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
+user_recently_played = sp.current_user_recently_played() # get users last played (limit = 50)
 
-
-spot_auth = spotipy.oauth2.SpotifyOAuth(client_id     = sp_client,      # client ID
-                            client_secret = sp_secret,  # Secret
-                            redirect_uri  = sp_redirect,  # redirect to....
-                            scope         = sp_scopes)             # access scope
-spot_auth.get_access_token()
-
-# %%
-sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id = sp_client,
-                                                             client_secret = sp_secret))
-
-#
-sp = spotipy.Spotify(auth_manager = SpotifyOAuth(
-    client_id      = sp_client,     # Spotify developer client ID 
-    client_secret  = sp_secret,     # Spotify developer client secret
-    #redirect_uri  = sp_api_url,    # redirect to spotify API call
-    redirect_uri   = sp_redirect,   # testing local call? 
-    scope          = sp_scopes))    # Scopes (a list should be OK)
-# see -> https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
-
-
-user_recently_played = sp.current_user_recently_played()
+user_recently_played.keys()
+# (['items', 'next', 'cursors', 'limit', 'href'])
 
 user_recently_played["items"][0].keys()
+# (['track', 'played_at', 'context'])
+
 user_recently_played["items"][0]["track"].keys()
+# (['album', 'artists', 'available_markets', 'disc_number', 'duration_ms', 
+# 'explicit', # 'external_ids', 'external_urls', 'href', 'id', 'is_local', 
+# 'name', 'popularity', 'preview_url', 'track_number', 'type', 'uri'])
+
+
+# %% loop
+'''
+To-do :
+    Remixed songs do not have a tag for "remixed", they are all 
+'''
+d = {}
+for item in user_recently_played["items"]:
+        d["played_time"]    = item["played_at"]
+        d["track_title"]    = item["track"]["name"]
+        d["artists"] = []
+        for artist in item["track"]["artists"]:
+            d["artists"]   += artist["name"]
+        d["duration"]       = item["track"]["duration_ms"]
+        d["popularity"]     = item["track"]["popularity"]
+        d["uri"]            = item["track"]["uri"]
+        
+        
+        
+user_recently_played["items"][0]["track"].keys()
+user_recently_played["items"][0]["track"]["duration_ms"]
+user_recently_played["items"][0]["track"]["artists"][0].keys()
+user_recently_played["items"][0]["track"]["artists"][0]["name"]
+        
+
+# does not get out
+testing =        sp.track("7DBdjkgNcnTUrRfKsZaSny")
+testing["artists"]
 
 user_recently_played["items"][0]["track"]["name"]
+
+
+len(user_recently_played["items"])
+user_recently_played["items"][0]["context"]
+
+
+
+
+
+
+
 
 
 
