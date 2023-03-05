@@ -3,6 +3,14 @@
 Created on Wed Mar  1 13:49:54 2023
 
 @author: steff
+
+
+'''
+To-do :
+    Remixed songs do not have a tag for "remixed", they are all 
+'''
+
+
 """
 
 ##### User authorization to read private and history
@@ -81,53 +89,76 @@ sp = spotipy.Spotify(auth_manager = sp_user_auth)
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
 user_recently_played = sp.current_user_recently_played() # get users last played (limit = 50)
 
-user_recently_played.keys()
-# (['items', 'next', 'cursors', 'limit', 'href'])
 
-user_recently_played["items"][0].keys()
-# (['track', 'played_at', 'context'])
-
-user_recently_played["items"][0]["track"].keys()
-# (['album', 'artists', 'available_markets', 'disc_number', 'duration_ms', 
-# 'explicit', # 'external_ids', 'external_urls', 'href', 'id', 'is_local', 
-# 'name', 'popularity', 'preview_url', 'track_number', 'type', 'uri'])
-
-
-# %% loop
-'''
-To-do :
-    Remixed songs do not have a tag for "remixed", they are all 
-'''
-d = {}
+# %% Get recently played
+dl_recently = []
 for item in user_recently_played["items"]:
-        d["played_time"]    = item["played_at"]
-        d["track_title"]    = item["track"]["name"]
-        d["artists"] = []
-        for artist in item["track"]["artists"]:
-            d["artists"]   += artist["name"]
-        d["duration"]       = item["track"]["duration_ms"]
-        d["popularity"]     = item["track"]["popularity"]
-        d["uri"]            = item["track"]["uri"]
+    d = {}
+    d["played_time"]    = item["played_at"]
+    d["track_title"]    = item["track"]["name"]
+    da = []
+    for artist in item["track"]["artists"]:
+        da.append(artist["name"])
+    d["artists"]        = da
+    d["popularity"]     = item["track"]["popularity"]
+    d["uri"]            = item["track"]["uri"]
+    d["duration"]       = item["track"]["duration_ms"]
+    dl_recently.append(d)
+       
+df_recently = pd.DataFrame(dl_recently)
         
-        
-        
-user_recently_played["items"][0]["track"].keys()
-user_recently_played["items"][0]["track"]["duration_ms"]
-user_recently_played["items"][0]["track"]["artists"][0].keys()
-user_recently_played["items"][0]["track"]["artists"][0]["name"]
-        
-
+# %%  Get playlist tracks 
 # does not get out
-testing =        sp.track("7DBdjkgNcnTUrRfKsZaSny")
-testing["artists"]
 
-user_recently_played["items"][0]["track"]["name"]
+playlist_tracks = sp.playlist_tracks("2vNB2I9nXt9oqCgq7VQ2tn") # 2022 playlist
 
+dl_playlist = []
+for item in playlist_tracks["items"]:
+    d = {}
+    d["track_title"]       = item["track"]["name"]
+    #da = []
+    d["artists"]           = []
+    for artist in item["track"]["artists"]:
+        d["artists"].append(artist["name"])
+    d["popularity"]        = item["track"]["popularity"]
+    d["uri"]               = item["track"]["uri"]
+    d["duration"]          = item["track"]["duration_ms"]
+    d["added_by"]          = item["added_by"]["id"]
+    d["added_at"]          = item["added_at"]
+    
+df_playlist = pd.DataFrame(dl_playlist)
 
-len(user_recently_played["items"])
-user_recently_played["items"][0]["context"]
+# %%  Top artists
+top_artists = sp.current_user_top_artists()
 
+dl_artists = []
+for item in top_artists["items"]:
+    d = {}
+    d["name"]     =   item["name"]
+    d["popularity"]     =   item["popularity"]
+    d["genres"]     =   item["genres"]
+    dl_artists.append(d)
 
+df_artists = pd.DataFrame(dl_artist)
+
+# %%   Top tracks
+top_tracks = sp.current_user_top_tracks(limit = 50)
+
+dl_tracks = []
+for item in top_tracks["items"]:
+    d = {}
+    d["track_title"]    = item["name"]
+    da  = []
+    for artist in item["artists"]:
+        da.append(artist["name"])
+    d["artists"]        = da
+    d["popularity"]     = item["popularity"]
+    d["uri"]            = item["uri"]
+    d["duration"]       = item["duration_ms"]
+    d["duration"]       = item["images"]["release_dat"]
+    dl_tracks.append(d)
+
+df_tracks = pd.DataFrame(dl_tracks)
 
 
 
