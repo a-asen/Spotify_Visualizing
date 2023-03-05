@@ -35,9 +35,9 @@ print(os.getcwd())
 with open("access/access_token.json", "r") as f:
     access_token = json.load(f)
 
-sp_client    = access_token["Client_ID"]       # Client ID
-sp_secret    = access_token["Client_Secret"]   # Client Secret
-sp_redirect  = "http://localhost:8888/callback" # Local to grantk access? 
+sp_client    = access_token["Client_ID"]            # Client ID
+sp_secret    = access_token["Client_Secret"]        # Client Secret
+sp_redirect  = "http://localhost:8888/callback"     # Local to grantk access? 
 # sp_scopes  = "user-read-recently-played"  # Scopes
 sp_scopes    = "user-read-playback-state, user-read-currently-playing, user-read-playback-position, user-top-read, user-read-recently-played, playlist-read-private,playlist-read-collaborative"
 # https://developer.spotify.com/documentation/general/guides/authorization/scopes/ 
@@ -96,10 +96,9 @@ for item in user_recently_played["items"]:
     d = {}
     d["played_time"]    = item["played_at"]
     d["track_title"]    = item["track"]["name"]
-    da = []
+    d["artists"] = []
     for artist in item["track"]["artists"]:
-        da.append(artist["name"])
-    d["artists"]        = da
+        d["artists"].appen(artist["name"])
     d["popularity"]     = item["track"]["popularity"]
     d["uri"]            = item["track"]["uri"]
     d["duration"]       = item["track"]["duration_ms"]
@@ -107,7 +106,7 @@ for item in user_recently_played["items"]:
        
 df_recently = pd.DataFrame(dl_recently)
         
-# %%  Get playlist tracks 
+# %%  Get "a" playlist tracks 
 # does not get out
 
 playlist_tracks = sp.playlist_tracks("2vNB2I9nXt9oqCgq7VQ2tn") # 2022 playlist
@@ -116,7 +115,6 @@ dl_playlist = []
 for item in playlist_tracks["items"]:
     d = {}
     d["track_title"]       = item["track"]["name"]
-    #da = []
     d["artists"]           = []
     for artist in item["track"]["artists"]:
         d["artists"].append(artist["name"])
@@ -160,6 +158,40 @@ for item in top_tracks["items"]:
 
 df_tracks = pd.DataFrame(dl_tracks)
 
+
+# %%  Get song analysis
+
+playlist_features = sp.audio_features(df_playlist["uri"])
+
+playlist_features[0].keys()
+
+
+analysis = sp.audio_analysis("6swKdthrzbQO6HJWl7irWQ")
+
+
+analysis.keys()
+analysis["meta"]
+analysis["track"].keys()
+analysis["track"]["synchstring"]
+
+analysis["sections"][0].keys()
+analysis["sections"][0]["loudness"]
+
+
+analysis["segments"][0].keys()
+zanalysis["segments"][0]
+track_analysis = []
+
+for item in analysis["segments"]:
+    d = {}
+    d[""]
+
+analysis["segments"][0]["loudness_max_time"]
+analysis["segments"][0]["loudness_max"]
+analysis["segments"][0]["loudness_end"]
+analysis["segments"][0]["loudness_max_time"]
+analysis["segments"][0]["pitches"]
+analysis["segments"][0]["timbre"]
 
 
 
