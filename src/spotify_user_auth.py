@@ -142,7 +142,7 @@ df_artists = pd.DataFrame(dl_artist)
 # %%   Top tracks
 top_tracks = sp.current_user_top_tracks(limit = 50)
 
-dl_tracks = []
+dl_top = []
 for item in top_tracks["items"]:
     d = {}
     d["track_title"]    = item["name"]
@@ -153,49 +153,57 @@ for item in top_tracks["items"]:
     d["popularity"]     = item["popularity"]
     d["uri"]            = item["uri"]
     d["duration"]       = item["duration_ms"]
-    d["duration"]       = item["images"]["release_dat"]
-    dl_tracks.append(d)
+    dl_top.append(d)
 
-df_tracks = pd.DataFrame(dl_tracks)
+df_top = pd.DataFrame(dl_top)
 
 
 # %%  Get song analysis
 
-playlist_features = sp.audio_features(df_playlist["uri"])
+#analysis = sp.audio_analysis("6swKdthrzbQO6HJWl7irWQ") # 2022 first
+analysis = sp.audio_analysis("0vyOnxhF0xymBvKotSLSfA") #rapture # top 1 
 
-playlist_features[0].keys()
-
-
-analysis = sp.audio_analysis("6swKdthrzbQO6HJWl7irWQ")
-
-
-analysis.keys()
-analysis["meta"]
-analysis["track"].keys()
-analysis["track"]["synchstring"]
-
-analysis["sections"][0].keys()
-analysis["sections"][0]["loudness"]
-
-
-analysis["segments"][0].keys()
-zanalysis["segments"][0]
 track_analysis = []
-
 for item in analysis["segments"]:
     d = {}
-    d[""]
+    d["time"]            =  item["duration"]
+    d["loudness_time"]   =  item["loudness_max_time"]
+    d["loudness_max"]    =  item["loudness_max"]
+   # d["loudness_end"]    =  item["loudness_end"] # doesnt add anything apparently
+    d["pitch-1"]           =  item["pitches"][0]
+    d["pitch-2"]           =  item["pitches"][1]
+    d["pitch-3"]           =  item["pitches"][2]
+    d["pitch-4"]           =  item["pitches"][3]
+    d["pitch-5"]           =  item["pitches"][4]
+    d["pitch-6"]           =  item["pitches"][5]
+    d["pitch-7"]           =  item["pitches"][6]
+    d["pitch-8"]           =  item["pitches"][7]
+    d["pitch-9"]           =  item["pitches"][8]
+    d["pitch-10"]          =  item["pitches"][9]
+    d["pitch-11"]          =  item["pitches"][10]
+    d["pitch-12"]          =  item["pitches"][11]
+    d["timbre-1"]          =  item["timbre"][0]
+    d["timbre-2"]          =  item["timbre"][1]
+    d["timbre-3"]          =  item["timbre"][2]
+    d["timbre-4"]          =  item["timbre"][3]
+    d["timbre-5"]          =  item["timbre"][4]
+    d["timbre-6"]          =  item["timbre"][5]
+    d["timbre-7"]          =  item["timbre"][6]
+    d["timbre-8"]          =  item["timbre"][7]
+    d["timbre-9"]          =  item["timbre"][8]
+    d["timbre-10"]          =  item["timbre"][9]
+    d["timbre-11"]          =  item["timbre"][10]
+    d["timbre-12"]          =  item["timbre"][11]
+    track_analysis.append(d)
 
-analysis["segments"][0]["loudness_max_time"]
-analysis["segments"][0]["loudness_max"]
-analysis["segments"][0]["loudness_end"]
-analysis["segments"][0]["loudness_max_time"]
-analysis["segments"][0]["pitches"]
-analysis["segments"][0]["timbre"]
+df_analysis = pd.DataFrame(track_analysis)
 
+df_analysis["pitch"][0][0]
 
+# %% playlist analysis
+# playlist_features = sp.audio_features(df_playlist["uri"]) # 2022 playlist
+playlist_features = sp.audio_features(df_top["uri"])
 
-
-
+playlist_features[0].keys()
 
 
