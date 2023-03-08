@@ -27,8 +27,8 @@ if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"): # School
 if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"): # Home
     path = "D:/_coding/GitHub/a-asen/spotify_project"
 
-os.chdir(path)
-print(os.getcwd())
+os.chdir(path) # change directory
+print(os.getcwd()) # get change
 
 #%%  Read Keys
 # Get access token # Read JSON
@@ -39,18 +39,11 @@ sp_client    = access_token["Client_ID"]            # Client ID
 sp_secret    = access_token["Client_Secret"]        # Client Secret
 sp_redirect  = "http://localhost:8888/callback"     # Local to grantk access? 
 # sp_scopes  = "user-read-recently-played"  # Scopes
-sp_scopes    = "user-read-playback-state, user-read-currently-playing, user-read-playback-position, user-top-read, user-read-recently-played, playlist-read-private,playlist-read-collaborative"
+sp_scopes    = "user-read-playback-state,user-read-currently-playing,user-read-playback-position,user-top-read,user-read-recently-played,playlist-read-private,playlist-read-collaborative"
 # https://developer.spotify.com/documentation/general/guides/authorization/scopes/ 
 # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
 
-# %%  Spotify General access credentials 
-# This gives us access to public info on Spotify 
-# See below for private related data
-#sp = spotipy.Spotify(auth_manager = SpotifyClientCredentials(client_id = sp_client,
-#                                                             client_secret = sp_secret))
-
 # %%   Spotify Authentication
-
 # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
 sp_user_auth = spotipy.SpotifyOAuth(
     client_id     = sp_client,    # client ID
@@ -64,17 +57,14 @@ sp_user_auth = spotipy.SpotifyOAuth(
         # redirect_uri  = sp_api_url # redirect to spotify API call
         # Does not work with this code, hence the above
 
-sp_user_auth.get_authorization_code() # Should open the browser
-
-# get_access_token = sp_user_auth.get_access_token() # access token 
-
-# get_auth_url = sp_user_auth.get_authorize_url()() # url response from
-
-# get_auth_response = sp_user_auth.get_auth_response() # get auth response (id?)
-# get_auth_code = sp_user_auth.get_authorization_code()  # get auth code
-
-# sp_user_auth.get_cached_token() # get stored file?
-
+# Problem with refresh token. Spotipy is supposed to do the following:
+    # 1. Check ".cache" file (or ".cache-<username>")
+    # 2. If its expired -> refresh it
+    # 3. If not in ".cache" open browser and store it in ".cache"
+# https://stackoverflow.com/questions/48883731/refresh-token-spotipy
+# In my case the token did not refresh (cause it was not expired)
+# Manually deleting the .cache file promted the browser for a refreshed token.
+# This resolved the issue
 
 # %%  Set the "auth_manager" to our credentials according to the given "auth" access
 
@@ -85,78 +75,87 @@ sp = spotipy.Spotify(auth_manager = sp_user_auth)
 
 # %%  Get Recently Played
 
-# See documentation:
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
-user_recently_played = sp.current_user_recently_played() # get users last played (limit = 50)
-
-
-# %% Get recently played
-dl_recently = []
-for item in user_recently_played["items"]:
-    d = {}
-    d["played_time"]    = item["played_at"]
-    d["track_title"]    = item["track"]["name"]
-    d["artists"] = []
-    for artist in item["track"]["artists"]:
-        d["artists"].appen(artist["name"])
-    d["popularity"]     = item["track"]["popularity"]
-    d["uri"]            = item["track"]["uri"]
-    d["duration"]       = item["track"]["duration_ms"]
-    dl_recently.append(d)
-       
-df_recently = pd.DataFrame(dl_recently)
+    
+def user_last_played(limit: int = 50): 
+    # https://stackoverflow.com/questions/61893276/can-i-define-both-functions-arguments-default-value-and-data-type-in-python
+    user_recently_played = sp.current_user_recently_played(limit=limit) # get users last played (limit = 50)
+    dl_recently = []
+    for item in user_recently_played["items"]:
+        d = {}
+        d["played_time"]    = item["played_at"]
+        d["track_title"]    = item["track"]["name"]
+        d["artists"] = []
+        for artist in item["track"]["artists"]:
+            d["artists"].appen(artist["name"])
+        d["popularity"]     = item["track"]["popularity"]
+        d["uri"]            = item["track"]["uri"]
+        d["duration"]       = item["track"]["duration_ms"]
+        dl_recently.append(d)
+           
+    df_recently = pd.DataFrame(dl_recently)
+    return(df_recently)
         
 # %%  Get "a" playlist tracks 
-# does not get out
-
-playlist_tracks = sp.playlist_tracks("2vNB2I9nXt9oqCgq7VQ2tn") # 2022 playlist
-
-dl_playlist = []
-for item in playlist_tracks["items"]:
-    d = {}
-    d["track_title"]       = item["track"]["name"]
-    d["artists"]           = []
-    for artist in item["track"]["artists"]:
-        d["artists"].append(artist["name"])
-    d["popularity"]        = item["track"]["popularity"]
-    d["uri"]               = item["track"]["uri"]
-    d["duration"]          = item["track"]["duration_ms"]
-    d["added_by"]          = item["added_by"]["id"]
-    d["added_at"]          = item["added_at"]
+def user_playlist_to_df(playlist_id: str):
+    playlist_tracks = sp.playlist_tracks(playlist_id) # 2022 playlist
     
-df_playlist = pd.DataFrame(dl_playlist)
+    dl_playlist = []
+    for item in playlist_tracks["items"]:
+        d = {}
+        d["track_title"]       = item["track"]["name"]
+        d["artists"]           = []
+        for artist in item["track"]["artists"]:
+            d["artists"].append(artist["name"])
+        d["popularity"]        = item["track"]["popularity"]
+        d["uri"]               = item["track"]["uri"]
+        d["duration"]          = item["track"]["duration_ms"]
+        d["added_by"]          = item["added_by"]["id"]
+        d["added_at"]          = item["added_at"]
+    #df_playlist = 
+    return(pd.DataFrame(dl_playlist))
+
+# example: 
+# playlist = user_playlist_to_df("2vNB2I9nXt9oqCgq7VQ2tn")
 
 # %%  Top artists
-top_artists = sp.current_user_top_artists()
+def user_top_artists_df():
+    top_artists = sp.current_user_top_artists()
+    
+    dl_artists = []
+    for item in top_artists["items"]:
+        d = {}
+        d["name"]     =   item["name"]
+        d["popularity"]     =   item["popularity"]
+        d["genres"]     =   item["genres"]
+        dl_artists.append(d)
+    #df_artists = 
+    return(pd.DataFrame(dl_artists))
 
-dl_artists = []
-for item in top_artists["items"]:
-    d = {}
-    d["name"]     =   item["name"]
-    d["popularity"]     =   item["popularity"]
-    d["genres"]     =   item["genres"]
-    dl_artists.append(d)
-
-df_artists = pd.DataFrame(dl_artist)
-
+# example:
+# top_artists = user_top_artists_df()
+    
 # %%   Top tracks
-top_tracks = sp.current_user_top_tracks(limit = 50)
+def user_top_tracks_df(limit: int = 50):
+    top_tracks = sp.current_user_top_tracks(limit = limit)
+    
+    dl_top = []
+    for item in top_tracks["items"]:
+        d = {}
+        d["track_title"]    = item["name"]
+        da  = []
+        for artist in item["artists"]:
+            da.append(artist["name"])
+        d["artists"]        = da
+        d["popularity"]     = item["popularity"]
+        d["uri"]            = item["uri"]
+        d["duration"]       = item["duration_ms"]
+        dl_top.append(d)
+    #df_top = 
+    return(pd.DataFrame(dl_top))
 
-dl_top = []
-for item in top_tracks["items"]:
-    d = {}
-    d["track_title"]    = item["name"]
-    da  = []
-    for artist in item["artists"]:
-        da.append(artist["name"])
-    d["artists"]        = da
-    d["popularity"]     = item["popularity"]
-    d["uri"]            = item["uri"]
-    d["duration"]       = item["duration_ms"]
-    dl_top.append(d)
-
-df_top = pd.DataFrame(dl_top)
-
+# Example:
+top_tracks = user_top_tracks_df()
 
 # %%  Get song analysis
 
@@ -202,8 +201,11 @@ df_analysis["pitch"][0][0]
 
 # %% playlist analysis
 # playlist_features = sp.audio_features(df_playlist["uri"]) # 2022 playlist
-playlist_features = sp.audio_features(df_top["uri"])
+playlist_features = sp.audio_features(top_tracks["uri"])
 
 playlist_features[0].keys()
+
+
+
 
 
