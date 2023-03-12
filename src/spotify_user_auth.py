@@ -108,57 +108,9 @@ def top_tracks_df(limit: int = 50):
         dl_top.append(d)
     return(pd.DataFrame(dl_top))
 
-# %%  Get song analysis
-def track_analysis_to_df(audio_uri_list: str):
-    """
-    Do an audio analysis of a list of songs (ID, URI, URL)
-     - Input:  List of song (ID, URI or URL)
-     - Output: Pandas dataframe
-     
-    # Example:
-    track_analysis = track_analysis_to_df(<my_top_tracks["uri"]>)
-    """
-    
-    data_list = []  # where we put our informatio
-    for enu, song in enumerate(audio_uri_list):  # For each
-        analysis = sp.audio_analysis(song)
-        for enu2, item in enumerate(analysis["segments"]):
-            d = {}
-            d["song index"]     = enu
-            d["track index"]    = enu2
-            d["time"]           = item["duration"]
-            d["loudness_time"]  = item["loudness_max_time"]
-            d["loudness_max"]   = item["loudness_max"]
-           # d["loudness_end"]    =  item["loudness_end"] # doesnt add anything apparently
-            d["pitch-1"]        = item["pitches"][0]
-            d["pitch-2"]        = item["pitches"][1]
-            d["pitch-3"]        = item["pitches"][2]
-            d["pitch-4"]        = item["pitches"][3]
-            d["pitch-5"]        = item["pitches"][4]
-            d["pitch-6"]        = item["pitches"][5]
-            d["pitch-7"]        = item["pitches"][6]
-            d["pitch-8"]        = item["pitches"][7]
-            d["pitch-9"]        = item["pitches"][8]
-            d["pitch-10"]       = item["pitches"][9]
-            d["pitch-11"]       = item["pitches"][10]
-            d["pitch-12"]       = item["pitches"][11]
-            d["timbre-1"]       = item["timbre"][0]
-            d["timbre-2"]       = item["timbre"][1]
-            d["timbre-3"]       = item["timbre"][2]
-            d["timbre-4"]       = item["timbre"][3]
-            d["timbre-5"]       = item["timbre"][4]
-            d["timbre-6"]       = item["timbre"][5]
-            d["timbre-7"]       = item["timbre"][6]
-            d["timbre-8"]       = item["timbre"][7]
-            d["timbre-9"]       = item["timbre"][8]
-            d["timbre-10"]      = item["timbre"][9]
-            d["timbre-11"]      = item["timbre"][10]
-            d["timbre-12"]      = item["timbre"][11]
-            data_list.append(d) # append this songs features to the list 
-    return(pd.DataFrame(data_list))
 
 #%%
-def track_analysis_to_df(audio_uri_list: str):
+def track_analysis_to_df(audio_uri_list: list):
     """
     Do an audio analysis of a list of songs (ID, URI, URL)
      - Input:  List of song (ID, URI or URL)
@@ -208,17 +160,30 @@ def track_analysis_to_df(audio_uri_list: str):
 
 
 # %%  Read  //  Get data
-if os.path.exists("data/my_top_50.csv"): # check if we already have data 
-    # no need to load the api unecessarily
-    # mtt = my_top_tracks
+
+# NO NEED TO LOAD THE API UNNECESSARIY
+# Check if we have stored the data
+# Else get and save the data 
+if os.path.exists("data/my_top_50.csv"): 
     mtt = pd.read_csv("data/my_top_50.csv")
-else: # if not, we get the data and save it
-    mtt = top_tracks_df() # get my top 50 songs (so far: 2023.03.11)    
+else: 
+    # get my top 50 songs (so far: 2023.03.11)
+    mtt = top_tracks_df() 
+    mtt = mtt.set_index(mtt.index+1)      # set new index
     mtt.to_csv("data/my_top_50.csv", index = False) # save it 
     
-if os.path.exists("data/my_top_50_analysis.csv"):
-    # mtta== my_top_tracks_analysis
-    mtta = pd.read_csv("data/my_top_50_analysis.csv")
+if os.path.exists("data/my_top_50_features.csv"):
+    msgf = pd.read_csv("data/my_top_50_features.csv")
+else:
+    # a move basic feature pack (simpler to graph)    
+    msgf = sp.audio_features(mtt["uri"])        # get features
+    msgf = pd.DataFrame(msgf)                   # dataframe features
+    msgf = msgf.drop(["id","track_href", "analysis_url","type"], axis = 1) # drop useless columns 
+    msgf = msgf.set_index(msgf.index+1)
+    msgf.to_csv("data/my_top_50_features.csv", index = False) # save
+    
+if os.path.exists("data/my_top_50_specifics.csv"):
+    mtta = pd.read_csv("data/my_top_50_specifics.csv")
 else:
     mtta = track_analysis_to_df(mtt["uri"]) # get features
     mtta["culminative_time"] = pd.NA # new var
@@ -229,17 +194,14 @@ else:
             mtta.loc[value,"culminative_time"]
         elif mtta["track index"][value] > 0: # if we are on the same track, we continue from last value 
             mtta["culminative_time"][value] = mtta["culminative_time"][value-1] + mtta["time"][value]
-            
-    mtta.to_csv("data/my_top_50_analysis.csv", index = False)
-
+    mtta.to_csv("data/my_top_50_specifics.csv", index = False)
 
 # %% Subset
 # get out my favorite song features
 # mtsf = my_top_song_features
 mtsf = mtta[mtta["song index"] == 0] # subset of my top song.
 
-
-
+"""
 ##### MAYBE NOT, BELOW
 # %%  Pivot dataframe for seaborn graph:
 # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.wide_to_long.html
@@ -269,33 +231,109 @@ sb.lineplot(mtsf_long.loc[mtsf_long.value_index.isin(vals)],
            x = "culminative_time", 
            y = "timbre", "loudness_max",
            hue = "value_index",)
-### ---
 
+#%%<<<<<<zzzz
+f2, ax1 = sb
+
+test = sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-1", kind = "line")
+
+test.set_titles("test")
+
+test.axes_dict.items()
+
+ax = sb.relplot(my_top_song_features, x = "culminative_time", y = "pitch-7", kind = "line")
+
+sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-2", kind="line")
+
+sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-3", kind="line")
+### ---
+"""
 #%%    
 ###############################################################################
 ####                            Graphs                                     ####
 ###############################################################################
-
 #%%    create our ax
 import matplotlib.pyplot as plt
 import numpy as np
 fig, ax = plt.subplots()
 
 #%%
-# RATHER LEARN MATPLOTLIB  AND fig,ax things before "seaborn" 
-
-# double plotting in matplotlib: https://matplotlib.org/stable/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py
-
 """
+# double plotting in matplotlib: https://matplotlib.org/stable/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py
 # https://stackoverflow.com/a/8228808
  - plt.cla() clears an axis, i.e. the currently active axis in the current figure. It leaves the other axes untouched.
  - plt.clf() clears the entire current figure with all its axes, but leaves the window opened, such that it may be reused for other plots.
  - plt.close() closes a window, which will be the current window, if not specified otherwise.
 
 # Thus we can make ONE FIGURE, ADD TO IT (ax) and clear it! 
+
+Why am i missing help information on "ax" variable:
+    lookup: https://matplotlib.org/stable/api/axes_api.html#basic
 """
+# to interpret features of track analysis: 
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-audio-features
+
+# compare my music features to top 50 of norway ?
+# https://open.spotify.com/playlist/37i9dQZEVXbJvfa0Yxg7E7?si=94da68a1315a418f
+
+msgf_sub = msgf.loc[1:20,:]
+ax.set_facecolor("#e0e0e0")
+
+# Speechiness
+ax.plot(msgf_sub.index, msgf_sub["danceability"], c ="green", linewidth = 3)
+
+ax.plot(msgf_sub.index, msgf_sub["speechiness"], c = "blue")
+
+ax.plot(msgf_sub.index, msgf_sub["energy"], c ="yellow", linewidth = 3)
+
+ax.plot(msgf_sub.index, msgf_sub["valence"], c ="black", linewidth = 3)
+
+#useless
+ax.plot(msgf_sub.index, msgf_sub["instrumentalness"], c ="red", linewidth = 3)
+ax.plot(msgf_sub.index, msgf_sub["acousticness"], c ="purple", linewidth = 3)
+
+plt.cla()
+
+
+ax.fill_between(msgf_sub.index, msgf_sub["danceability"], msgf_sub["speechiness"])
+ax.fill_between(msgf_sub.index, msgf_sub["speechiness"])
+ax.fill_between(msgf_sub.index, msgf_sub["danceability"],.9)
+
+#ax.plot(msgf.index, msgf["tempo"], c ="purple", linewidth = 3)
+
+ax.plot(msgf_10.index, np.log10(abs(msgf_10["loudness"])), linewidth = 3)
+ax.set_xticks(np.arange(1,51,1))
+
+
+ax.grid()
+ax.set_xticks(np.arange(1,11,1))
+ax.set_yticks(np.arange(0.0,1.1,0.1))
+ax.plot(msgf_10.index, msgf_10["danceability"])
+
+
+plt.cla()
+
+
+
+
+# %%  IF I WANT, I can do more "fine grane analysis of a specific track:
+special = track_analysis_to_df(["5QdATOQJp1kififgPZYQ2Q"])
+
+sp.audio_analysis("5QdATOQJp1kififgPZYQ2Q")
+# ANALYSIS OF: 5QdATOQJp1kififgPZYQ2Q
+
 # add loudness - do something fancy here
 ax.plot(mtsf["culminative_time"], mtsf["loudness_max"])
+
+
+ax.set_yticks(np.arange(-60,0,5))
+ax.set_title("Loudness over time units")
+ax.set_ylabel("Loudness")
+ax.set_title("")
+ax
+plt.cla()
+
+fig
 
 ax.plot(mtsf["culminative_time"], mtsf["timbre-2"]) # add timbre 2
 ax.plot(mtsf["culminative_time"], mtsf["timbre-3"]) # add timbre 3
@@ -319,35 +357,6 @@ ax.plot(mtsf["culminative_time"], mtsf.loc[:,"timbre-1":"timbre-12"].mean(axis=1
 
 # SET OTHER INFORMATION TO "AX"
 # ax.set_yticks(np.arange(-200,100,20))
-
-
-#%%<<<<<<zzzz
-f2, ax1 = sb
-
-test = sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-1", kind = "line")
-
-test.set_titles("test")
-
-
-
-test.axes_dict.items()
-
-ax = sb.relplot(my_top_song_features, x = "culminative_time", y = "pitch-7", kind = "line")
-
-sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-2", kind="line")
-
-sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-3", kind="line")
-
-
-
-
-#%%
-fig.tight_layout()
-plt.show()
-fig
-
-
-
 
 
 
