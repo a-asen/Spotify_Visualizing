@@ -1,51 +1,101 @@
 ,track_title,artists,popularity,uri,duration,added_by,added_at
-0,As It Was,['Harry Styles'],90,spotify:track:4LRPiXqCikLlN15c3yImP7,167303,,2022-11-30T13:47:00Z
-1,Heat Waves,['Glass Animals'],83,spotify:track:02MWAaffLxlfxAUY7c5dvx,238805,,2022-11-30T13:47:00Z
-2,STAY (with Justin Bieber),"['The Kid LAROI', 'Justin Bieber']",84,spotify:track:5HCyWlXZPP0y6Gqq8TgA20,141805,,2022-11-30T13:47:00Z
-3,Me Porto Bonito,"['Bad Bunny', 'Chencho Corleone']",90,spotify:track:6Sq7ltF9Qa7SNFBsV5Cogx,178567,,2022-11-30T13:47:00Z
-4,Tití Me Preguntó,['Bad Bunny'],89,spotify:track:1IHWl5LamUGEuP4ozKQSXZ,243716,,2022-11-30T13:47:00Z
-5,Cold Heart - PNAU Remix,"['Elton John', 'Dua Lipa', 'PNAU']",83,spotify:track:6zSpb8dQRaw0M1dK8PBwQz,202735,,2022-11-30T13:47:00Z
-6,Enemy (with JID) - from the series Arcane League of Legends,"['Imagine Dragons', 'JID', 'Arcane', 'League of Legends']",81,spotify:track:1r9xUipOqoNwggBpENDsvJ,173381,,2022-11-30T13:47:00Z
-7,"Quevedo: Bzrp Music Sessions, Vol. 52","['Bizarrap', 'Quevedo']",91,spotify:track:2tTmW7RDtMQtBk7m2rYeSw,198937,,2022-11-30T13:47:00Z
-8,Ojitos Lindos,"['Bad Bunny', 'Bomba Estéreo']",88,spotify:track:3k3NWokhRRkEPhCzPmV8TW,258298,,2022-11-30T13:47:00Z
-9,Running Up That Hill (A Deal With God) - 2018 Remaster,['Kate Bush'],76,spotify:track:29d0nY7TzCoi22XBqDQkiP,300840,,2022-11-30T13:47:00Z
-10,INDUSTRY BABY (feat. Jack Harlow),"['Lil Nas X', 'Jack Harlow']",81,spotify:track:27NovPIUIRrOZoCHxABJwK,212000,,2022-11-30T13:47:00Z
-11,abcdefu,['GAYLE'],82,spotify:track:4fouWK6XVHhzl78KzQ1UjL,168601,,2022-11-30T13:47:00Z
-12,Efecto,['Bad Bunny'],88,spotify:track:5Eax0qFko2dh7Rl2lYs3bx,213061,,2022-11-30T13:47:00Z
-13,Ghost,['Justin Bieber'],84,spotify:track:6I3mqTwhRpn34SLVafSH7G,153190,,2022-11-30T13:47:00Z
-14,Glimpse of Us,['Joji'],85,spotify:track:6xGruZOHLs39ZbVccQTuPZ,233456,,2022-11-30T13:47:00Z
-15,Moscow Mule,['Bad Bunny'],85,spotify:track:6Xom58OOXk2SoU711L2IXO,245939,,2022-11-30T13:47:00Z
-16,Shivers,['Ed Sheeran'],84,spotify:track:50nfwKoDiSYg8zOCREWAm5,207853,,2022-11-30T13:47:00Z
-17,Easy On Me,['Adele'],82,spotify:track:0gplL1WMoJ6iYaPgMCL0gX,224694,,2022-11-30T13:47:00Z
-18,MIDDLE OF THE NIGHT,['Elley Duhé'],84,spotify:track:58HvfVOeJY7lUuCqF0m3ly,184447,,2022-11-30T13:47:00Z
-19,Woman,['Doja Cat'],84,spotify:track:6Uj1ctrBOjOas8xZXGqKk4,172626,,2022-11-30T13:47:00Z
-20,Sweater Weather,['The Neighbourhood'],88,spotify:track:2QjOHCTQ1Jl3zawyYOpxh6,240400,,2022-11-30T13:47:00Z
-21,Desesperados,"['Rauw Alejandro', 'Chencho Corleone']",80,spotify:track:6mmPpaltUZK7xjNlBPQQ0p,224996,,2022-11-30T13:47:00Z
-22,Another Love,['Tom Odell'],90,spotify:track:3JvKfv6T31zO0ini8iNItO,244360,,2022-11-30T13:47:00Z
-23,PROVENZA,['KAROL G'],84,spotify:track:7dSZ6zGTQx66c2GF91xCrb,210200,,2022-11-30T13:47:00Z
-24,Bam Bam (feat. Ed Sheeran),"['Camila Cabello', 'Ed Sheeran']",79,spotify:track:0QBzMgT7NIeoCYy3sJCof1,206070,,2022-11-30T13:47:00Z
-25,First Class,['Jack Harlow'],81,spotify:track:0wHFktze2PHC5jDt3B17DC,173947,,2022-11-30T13:47:00Z
-26,Blinding Lights,['The Weeknd'],89,spotify:track:0VjIjW4GlUZAMYd2vXMi3b,200040,,2022-11-30T13:47:00Z
-27,MAMIII,"['Becky G', 'KAROL G']",79,spotify:track:1ri9ZUkBJVFUdgwzCnfcYs,226088,,2022-11-30T13:47:00Z
-28,Where Are You Now,"['Lost Frequencies', 'Calum Scott']",84,spotify:track:3uUuGVFu1V7jTQL60S1r8z,148197,,2022-11-30T13:47:00Z
-29,Bad Habits,['Ed Sheeran'],84,spotify:track:3rmo8F54jFF8OgYsqTxm5d,230746,,2022-11-30T13:47:00Z
-30,Pepas,['Farruko'],81,spotify:track:5fwSHlTEWpluwOM0Sxnh5k,287120,,2022-11-30T13:47:00Z
-31,good 4 u,['Olivia Rodrigo'],83,spotify:track:4ZtFanR9U6ndgddUvNcjcG,178146,,2022-11-30T13:47:00Z
-32,Dandelions,['Ruth B.'],87,spotify:track:2eAvDnpXP5W0cVtiI0PUxV,233720,,2022-11-30T13:47:00Z
-33,About Damn Time,['Lizzo'],82,spotify:track:1PckUlxKqWQs3RlWXVBLw3,191822,,2022-11-30T13:47:00Z
-34,THATS WHAT I WANT,['Lil Nas X'],81,spotify:track:0e8nrvls4Qqv5Rfa2UhqmO,143901,,2022-11-30T13:47:00Z
-35,I Ain't Worried,['OneRepublic'],91,spotify:track:4h9wh7iOZ0GGn8QVp4RAOB,148485,,2022-11-30T13:47:00Z
-36,My Universe,"['Coldplay', 'BTS']",79,spotify:track:46HNZY1i7O6jwTA7Slo2PI,226198,,2022-11-30T13:47:00Z
-37,La Bachata,['Manuel Turizo'],93,spotify:track:5ww2BF9slyYgNOk37BlC4u,162637,,2022-11-30T13:47:00Z
-38,Una Noche en Medellín,['Cris Mj'],83,spotify:track:1O2pcBJGej0pmH2Y9XZMs6,153750,,2022-11-30T13:47:00Z
-39,I Love You So,['The Walters'],85,spotify:track:4SqWKzw0CbA05TGszDgMlc,160239,,2022-11-30T13:47:00Z
-40,Infinity,['Jaymes Young'],81,spotify:track:1SOClUWhOi8vHZYMz3GluK,237720,,2022-11-30T13:47:00Z
-41,Party,"['Bad Bunny', 'Rauw Alejandro']",82,spotify:track:4tYFy8ALRjIZvnvSLw5lxN,227628,,2022-11-30T13:47:00Z
-42,Watermelon Sugar,['Harry Styles'],86,spotify:track:6UelLqGlWMcVH1E5c4H7lY,174000,,2022-11-30T13:47:00Z
-43,The Motto,"['Tiësto', 'Ava Max']",82,spotify:track:18asYwWugKjjsihZ0YvRxO,164818,,2022-11-30T13:47:00Z
-44,traitor,['Olivia Rodrigo'],83,spotify:track:5CZ40GBx1sQ9agT82CLQCT,229226,,2022-11-30T13:47:00Z
-45,Late Night Talking,['Harry Styles'],87,spotify:track:1qEmFfgcLObUfQm0j1W2CK,177954,,2022-11-30T13:47:00Z
-46,Until I Found You,['Stephen Sanchez'],84,spotify:track:0T5iIrXA4p5GsubkhuBIKV,177720,,2022-11-30T13:47:00Z
-47,Lo Siento BB:/ (with Bad Bunny & Julieta Venegas),"['Tainy', 'Bad Bunny', 'Julieta Venegas']",80,spotify:track:4gzsuuZypVbxs0Af1LSZyB,207301,,2022-11-30T13:47:00Z
-48,Yonaguni,['Bad Bunny'],83,spotify:track:2JPLbjOn0wPCngEot2STUS,206710,,2022-11-30T13:47:00Z
-49,Tarot,"['Bad Bunny', 'Jhayco']",82,spotify:track:41oY4WCTj5kccfesTVFnvN,237894,,2022-11-30T13:47:00Z
+1,Your Body,"['Bluckther', 'Martin Trevy']",29,spotify:track:7JiBmwjEv3ZjqwNExcQo5D,149508,,1970-01-01T00:00:00Z
+2,Take Care Of You,"['REZarin', 'Joey Busse', 'Cubfonic']",32,spotify:track:2fCoorR4NXH4dMeJ8vtD1C,141486,,1970-01-01T00:00:00Z
+3,Bleeding,"['Raven Link', 'Vin Bogart']",39,spotify:track:7CgidF5NeRoSTW0snrwCP3,180737,,1970-01-01T00:00:00Z
+4,How Does it Feel,"['DLMT', 'ellis', 'AWR']",31,spotify:track:1jue7k91j4oP3MaQRbGqgZ,217638,,1970-01-01T00:00:00Z
+5,Radio Silence (KVMO Remix),"['Snugs', 'Kvmo']",34,spotify:track:2AvTZ794Plk2dgGaVCgwGj,174782,,1970-01-01T00:00:00Z
+6,Get To Me,"['Pyro', 'Fiko']",34,spotify:track:1OaLdxiB285eEOUsF0ivP5,166504,,1970-01-01T00:00:00Z
+7,Eyes,"['MNI', 'Jordan Shaw']",42,spotify:track:2cVQVhgyRPzJusXAuklkWF,167380,,1970-01-01T00:00:00Z
+8,Real Love,"['Dillon Francis', 'Aleyna Tilki']",59,spotify:track:4Juaa2ppIOYcSWbrVtcrNp,135265,,1970-01-01T00:00:00Z
+9,Lay Me Down,"['Ranji', 'Ghost Rider', 'Berg']",51,spotify:track:3GKN5PYjlS7baPtrbdLtev,210652,,1970-01-01T00:00:00Z
+10,Ocean - Maybon Remix,"['Elsa & Emilie', 'Maybon']",35,spotify:track:6U2rUJ0JpRNj81ZpNQ5taW,182811,,1970-01-01T00:00:00Z
+11,Nothing Hurts (Kean Dysso Remix),"['Minelli', 'KEAN DYSSO']",21,spotify:track:4FsxiNcEvMBFDkw6PkzI89,173637,,1970-01-01T00:00:00Z
+12,Light It Up,['The Kudu'],32,spotify:track:3LPGV4Ljx71mA0J9UR2GwN,200976,,1970-01-01T00:00:00Z
+13,A Little Bit of Faith,"['MOGUAI', 'Graham Candy', 'MY PARADE']",36,spotify:track:3AnCxW4JAndjVO7Uj1Onzi,182363,,1970-01-01T00:00:00Z
+14,Play That Track,"['Blinded Hearts', 'Lucifer']",45,spotify:track:6OPQw3E008UIy26o1QwMoT,152548,,1970-01-01T00:00:00Z
+15,In My Heart,['AMARI'],34,spotify:track:1SYU9IEocicolaiXsUx7Fr,191676,,1970-01-01T00:00:00Z
+16,Dans På Bordet,"['Ballinciaga', 'David Mokel']",61,spotify:track:56kyGGwLIVAR30ZFiASn8Q,143520,,1970-01-01T00:00:00Z
+17,Heat Waves,['Glass Animals'],83,spotify:track:02MWAaffLxlfxAUY7c5dvx,238805,,1970-01-01T00:00:00Z
+18,Sex with You,"['Wahlstedt', 'AMAANDA']",27,spotify:track:04qrVtScdD4IBGSL5q6yEv,205090,,1970-01-01T00:00:00Z
+19,Why Do You Lie To Me (feat. Lil Baby) - Besomorph Remix,"['Topic', 'A7S', 'Lil Baby', 'Besomorph']",30,spotify:track:6B7maLavnTIWoF5Tfqx7AJ,158000,,1970-01-01T00:00:00Z
+20,TANTE,"['Kevin Lauren', 'Ballinciaga']",52,spotify:track:56oWBEoaWwiyaPLe0PqB0k,133714,,1970-01-01T00:00:00Z
+21,22s,"['KOKO', 'Nina Chuba', 'Dillistone']",45,spotify:track:4sZpKcU8D7wYjhnRI7tCi9,185825,,1970-01-01T00:00:00Z
+22,Don't Get To Love,"['Nevada', 'Brooke Williams']",30,spotify:track:4Y3GAUYfDbmKDdyYsiCeZE,175500,,1970-01-01T00:00:00Z
+23,Friends Say,"['Keepin It Heale', 'Michael Walls']",36,spotify:track:7JOPoz6ZrucVRm2KMq1H1P,151680,,1970-01-01T00:00:00Z
+24,Close to Me,['Kitness'],37,spotify:track:3TxmI2wCPeVWCu1Qkp2BLS,163014,,1970-01-01T00:00:00Z
+25,Identical (feat. Yeah Boy),"['Next Habit', 'Yeah Boy']",32,spotify:track:6mxVX85uHiirpiJBlPpsuf,166828,,1970-01-01T00:00:00Z
+26,Someone You Loved,"['Kesh', 'Gab Hydes', 'NEVRMIND']",32,spotify:track:4DMHUisnhnsIIcqAf9CNRc,176111,,1970-01-01T00:00:00Z
+27,Still Young (Ft. Oly),"['Rain Man', 'Oly']",33,spotify:track:5idOxv0TdMTauEJCvFlCV0,189818,,1970-01-01T00:00:00Z
+28,Playing With My Heart,"['Besomorph', 'Karra']",41,spotify:track:3hMpunBF4cTJybNRSBMU3t,164516,,1970-01-01T00:00:00Z
+29,In The Rain,['Tomas Lu'],37,spotify:track:15gRtNmWOkw48V9GnnporR,200005,,1970-01-01T00:00:00Z
+30,Lovers Never Ending,['Danko'],20,spotify:track:6MUfG001jW0sIrsyATzERH,152347,,1970-01-01T00:00:00Z
+31,Baby Kom Til Meg (On Tilt 2021),['Ballinciaga'],27,spotify:track:5pnGBqfC6eeJWDIB3YZmO2,152000,,1970-01-01T00:00:00Z
+32,Way Out,"['Nora Van Elken', 'Clara Mae']",39,spotify:track:6CO3fQyH8y4r3M9N7XUGVN,161538,,1970-01-01T00:00:00Z
+33,Ocean Drive,['Duke Dumont'],68,spotify:track:4b93D55xv3YCH5mT4p6HPn,206320,,1970-01-01T00:00:00Z
+34,Let Him Go,['Ayo Jay'],44,spotify:track:1vPklJ1dH1kUbHod4UH0JS,233286,,1970-01-01T00:00:00Z
+35,Rullelåt (Alcoholiday 2021),['Ballinciaga'],28,spotify:track:0F1RGt7vT3vQKejwuKUMrf,123025,,1970-01-01T00:00:00Z
+36,I Wanna Be There,"['DubVision', 'ANML KNGDM']",31,spotify:track:1s69tLqsMD7T7pHvQkrTf2,194516,,1970-01-01T00:00:00Z
+37,I Don't Know Why - Ellis Remix,"['NOTD', 'Astrid S', 'ellis']",36,spotify:track:7IXu5mZaYwEpGZUelJdYs4,200000,,1970-01-01T00:00:00Z
+38,Desert Rose,"['Victoria Kohana', 'RUNSTAR']",39,spotify:track:1lnJXwzPnpcPoqxKNr12fB,199322,,1970-01-01T00:00:00Z
+39,Beg for It,['Digitalz'],41,spotify:track:4kNoHLgAXSD7DJXsmVBvjA,183640,,1970-01-01T00:00:00Z
+40,Skies,"['Jeffrey Sutorius', 'Blackcode', 'Charlie Miller']",36,spotify:track:2FMAkEM7XEBV7nzcVCTa6N,180000,,1970-01-01T00:00:00Z
+41,So Crazy,"['Tabba', 'DJ Goja']",33,spotify:track:4Tc0OS7iNnAWAwhqPjDHmU,165600,,1970-01-01T00:00:00Z
+42,Deep Memories,['Cuish'],14,spotify:track:0XGv6LnB3dnyz57BccnEVR,189190,,1970-01-01T00:00:00Z
+43,Talk Talk,"['Drenchill', 'Holy Molly']",35,spotify:track:42vHoKD1WeloygySAlZ8cn,174000,,1970-01-01T00:00:00Z
+44,Adrenaline (feat. Will Matta),"['Kattison', 'Will Matta']",39,spotify:track:4NoJhQ59vsjDm4X3FDJjyt,178242,,1970-01-01T00:00:00Z
+45,Narkotika,['Herreløse'],33,spotify:track:1ZsIMbTe7Pj6Y1t1bjLqzY,209684,,1970-01-01T00:00:00Z
+46,What If I,['Minus Manus'],12,spotify:track:668QBPBAE68BYkb3jzEZE8,173766,,1970-01-01T00:00:00Z
+47,TILBAKE I CITY,['Kamelen'],46,spotify:track:3DDaKoNSvWzjVJlPvlexSQ,171500,,1970-01-01T00:00:00Z
+48,Love Got You,['Clouded.'],34,spotify:track:1XiuvPKuLJPWfCEAwUcQQH,139389,,1970-01-01T00:00:00Z
+49,Trapped Inside,['REZarin'],15,spotify:track:5rOkPtx1h5tImXgZE2eRz9,166750,,1970-01-01T00:00:00Z
+50,Like You Like That,"['Cuish', 'Soundwaves']",19,spotify:track:78O2EShbuL32LmEIWUJNmC,172515,,1970-01-01T00:00:00Z
+51,The Lucky Ones,"['Dytone', 'Emelie Cyréus']",29,spotify:track:2QrYaaAOB25ZPXtSxnDbPB,191914,,1970-01-01T00:00:00Z
+52,Superstar - JLV Remix,"['David Puentez', 'Albert Neve', 'JLV']",25,spotify:track:4K4N4aeIhCyH6RbbwkB13M,173187,,1970-01-01T00:00:00Z
+53,Rapture,"['Alok', 'Daniel Blume']",27,spotify:track:0vyOnxhF0xymBvKotSLSfA,166451,,1970-01-01T00:00:00Z
+54,In Your Eyes,"['Cuish', 'Pratham Gadiya']",1,spotify:track:7DVvCeBW8mHTPgnIAWkYWm,148250,,1970-01-01T00:00:00Z
+55,Can't Come To The Phone,"['Martin Jensen', 'Amber Van Day', 'N.F.I']",39,spotify:track:6u3RxBwCVPrkeiJgtfIU9p,175305,,1970-01-01T00:00:00Z
+56,Impulse,['Nomyn'],33,spotify:track:5MHDl1V44FFphzloKtLV8x,213968,,1970-01-01T00:00:00Z
+57,Chocolat - SI US PLAU Remix,"['Foothills', 'Laurell', 'SI US PLAU']",25,spotify:track:1K6XT4r3DEv5wfEmQrXlG0,155000,,1970-01-01T00:00:00Z
+58,For You I Die (feat. The High),"['Raaban', 'The High']",15,spotify:track:19KyyOAEVVWegDc7NuhE7n,160000,,1970-01-01T00:00:00Z
+59,Ser det på meg,['Herreløse'],19,spotify:track:0bn4BJxEzqvNj8uVSi3Kop,238206,,1970-01-01T00:00:00Z
+60,Do It Like Me (feat. B-Case),"['Chico Rose', 'B-Case']",33,spotify:track:3ZCPKGCsRSDcP17h9ubhFp,173281,,1970-01-01T00:00:00Z
+61,Breathing,['Virga Music Project'],26,spotify:track:09oISuuAu5zUb0j6AH8ayM,232306,,1970-01-01T00:00:00Z
+62,You're So Lovely,['Grass Kid'],34,spotify:track:4Oiu7UxCocenRkGb9Zj21o,142874,,1970-01-01T00:00:00Z
+63,Setting Fires - Sigma Remix,"['The Chainsmokers', 'XYLØ', 'Sigma']",32,spotify:track:73iR1IX5l9vHZEWk1XSpry,256733,,1970-01-01T00:00:00Z
+64,Better With You (feat. Temmpo),"['Maybon', 'Temmpo']",19,spotify:track:1KZB6HPCRbGnNVAdJPALkB,218581,,1970-01-01T00:00:00Z
+65,L.E.D. There Be Light - Single Mix,['Rank 1'],42,spotify:track:3GJqpBTOkrvR5XRxIo1Ie5,153150,,1970-01-01T00:00:00Z
+66,Kapital,['Kamelen'],40,spotify:track:31nCndCGWUrEtBgrLedktW,129698,,1970-01-01T00:00:00Z
+67,Paradise,['Moxura'],38,spotify:track:08gSMXjVznKkGsItLApPve,213818,,1970-01-01T00:00:00Z
+68,Naked - (THAT KIND Remix),"['Hayla', 'THAT KIND']",32,spotify:track:4wH6LUumKtSo93BZH82dts,251640,,1970-01-01T00:00:00Z
+69,Moon Child,"['Kola Man', 'Emie']",39,spotify:track:6Kbi1p4PbCj6t4Ct46chIM,161681,,1970-01-01T00:00:00Z
+70,The City,"['Timmy Trumpet', 'Swedish Red Elephant', '22Bullets']",30,spotify:track:65ixhkcfyWgOTH3K0FRZ4w,177864,,1970-01-01T00:00:00Z
+71,Hooked (feat. Ellen Aabol),"['Philip Cecil', 'Ellen Aabol']",31,spotify:track:0qJ7LOCfbhtoAkgMLqfRIf,177022,,1970-01-01T00:00:00Z
+72,No More,['Burak Bacio'],0,spotify:track:2wZpXl6A22K0tUI1HKcj9W,154960,,1970-01-01T00:00:00Z
+73,Majesty (feat. Oda Loves You),"['Maybon', 'Oda Loves You']",32,spotify:track:5TYG3yIuYHeZuO0IdIboMc,204326,,1970-01-01T00:00:00Z
+74,Say Hello,"['Keanu Silva', 'YouNotUs', 'Sam Gray']",36,spotify:track:1IfePeYOP0lWoTdR6PT1fz,147202,,1970-01-01T00:00:00Z
+75,Warcry,"['Pharaoh Swami', 'Pacoussa']",30,spotify:track:3L3w3d9KtsFIHdMipeYmu5,211869,,1970-01-01T00:00:00Z
+76,Endlessly,"['Gab Hydes', 'Jex']",26,spotify:track:7LgX6dvQDq3tAu1jskF2Th,183875,,1970-01-01T00:00:00Z
+77,Back 2 U,['Scott Rill'],47,spotify:track:3lrQX2YbeXOmnMvtAu30iB,160168,,1970-01-01T00:00:00Z
+78,Way Up,['Bishu'],43,spotify:track:3Y3EfOYx8TaDSeLLJvjP0N,205954,,1970-01-01T00:00:00Z
+79,Good Things Fall Apart (with Jon Bellion) [Tiësto's Big Room Remix],"['ILLENIUM', 'Jon Bellion', 'Tiësto']",44,spotify:track:42iaZygYmdyZomAtvPoxG1,247384,,1970-01-01T00:00:00Z
+80,Core (That's Who We Are),"['VIZE', 'Papa Roach']",44,spotify:track:3uqpYoSWRSnkW3jX9b94wO,178909,,1970-01-01T00:00:00Z
+81,AMNESIA (feat. Boy In Space),"['DREAMDNVR', 'Boy In Space']",48,spotify:track:1UyDQh3HBJwL6IxR9mXipZ,175826,,1970-01-01T00:00:00Z
+82,Dance with Me,"['Mauro Valdemi', 'Joan Alasta']",23,spotify:track:4yjMw4YHJIqgZ3Mg8FQ3Bp,144024,,1970-01-01T00:00:00Z
+83,Coming Home,['Kayote'],37,spotify:track:5xwtZVYl0n2ae6QmdqhpYl,161478,,1970-01-01T00:00:00Z
+84,Wanna Dü,"['Joza', 'TeZATalks']",25,spotify:track:3YaH3bBhoh8FPxEQLiVum6,155409,,1970-01-01T00:00:00Z
+85,Broken Child (feat. JDAM & LissA),"['Not Your Dope', 'JDAM', 'LissA']",33,spotify:track:77Dn6Y5SzjCzfXLjy89dYB,184800,,1970-01-01T00:00:00Z
+86,Out Of My Mind,['Slider & Magnit'],31,spotify:track:3ddYpulKUFyMwMtokGkFIr,165519,,1970-01-01T00:00:00Z
+87,Most,['Mynoorey'],32,spotify:track:6zE0t6ObUUeJO7ubCycQMB,162580,,1970-01-01T00:00:00Z
+88,Be Okay - CLMD Remix,"['Victoria Nadine', 'CLMD']",52,spotify:track:2ovjS1yyTSXy3F0KHlTVTx,128442,,1970-01-01T00:00:00Z
+89,On Top Of The World (feat. PollyAnna),"['LARI LUKE', 'PollyAnna']",36,spotify:track:7kFWyGuZ2NkelQ40fol5Qj,183295,,1970-01-01T00:00:00Z
+90,Nothing Looks Better Than You,"['Mordkey', 'Clara Sofie']",34,spotify:track:5gYZf46mLaTi6QNjrqrNR0,190390,,1970-01-01T00:00:00Z
+91,One Last Time,"['Lupage', 'Cuish', 'Cubfonic']",29,spotify:track:52LDf7PN28VoBh1Z17rX1g,142148,,1970-01-01T00:00:00Z
+92,I Follow Rivers,"['Helion', 'Mike Emilio', 'Vigiland', 'SUD']",54,spotify:track:4T8Cx2olPLZP4JgWNN4v1A,150720,,1970-01-01T00:00:00Z
+93,Green Eyes,['Lil Noodle'],47,spotify:track:5FgHrdvcYXSMaYdhkLoDyt,159162,,1970-01-01T00:00:00Z
+94,Red Dragon,['Arston'],38,spotify:track:1fLW42GvVHQaljw5YZgsHd,162311,,1970-01-01T00:00:00Z
+95,Midsummer Nights,"['Ryos', 'Maggie Szabo']",46,spotify:track:0ef5bVZMDti64urSeFO3eO,151451,,1970-01-01T00:00:00Z
+96,Waiting For Tonight,['ILYAA'],33,spotify:track:1G8XoNUpWJTGAfX5gHAgb6,193920,,1970-01-01T00:00:00Z
+97,Happy Hour,"['Felix Cartal', 'Kiiara']",43,spotify:track:6OFxiLfnMwOodCdV7x2yXC,168000,,1970-01-01T00:00:00Z
+98,Superstar,"['Wolfpack', 'Angemi', 'Flaremode']",17,spotify:track:78wcUP8PIyPEoAOWqp0iHM,163363,,1970-01-01T00:00:00Z
+99,Again,['Keanu Silva'],54,spotify:track:16HrOASfb75oNM5AcQV9Fh,142000,,1970-01-01T00:00:00Z
+100,SKYWALKER (P.A.F.F. Remix),"['P.A.F.F.', 'Hucci', 'Truvian Grey']",43,spotify:track:2XQSf0sdPWppMy9Kir4Gjj,212571,,1970-01-01T00:00:00Z

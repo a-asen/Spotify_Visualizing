@@ -98,7 +98,7 @@ def top_artists_df(sp):
 
 
 # %%   Top tracks
-def top_tracks_df(sp, limit: int = 50):
+def top_tracks_df(sp, limit: int = 50, time_range = str):
     """
     Get users top tracks.
      - Input:  
@@ -112,7 +112,7 @@ def top_tracks_df(sp, limit: int = 50):
     # Example:
     top_tracks = user_top_tracks_df(sp)
     """
-    top_tracks = sp.current_user_top_tracks(limit=limit)
+    top_tracks = sp.current_user_top_tracks(limit=limit, time_range = time_range)
     
     dl_top = []
     for item in top_tracks["items"]:
@@ -181,4 +181,6 @@ def track_analysis_to_df(sp, audio_uri_list: list):
             d["timbre-12"]      = item["timbre"][11]
             data_list.append(d) # append this songs features to the list 
     return(pd.DataFrame(data_list))
+
+
 
