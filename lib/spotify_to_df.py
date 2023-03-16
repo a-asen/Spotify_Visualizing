@@ -1,11 +1,6 @@
 # -*- coding: utf-8 -*-
-"""
-Created on Sun Mar 12 10:42:38 2023
-
-@author: steff
-"""
-
 import pandas as pd
+
 
 # %%  Get Recently Played
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
@@ -33,12 +28,13 @@ def last_played_df(sp, limit: int = 50): # https://stackoverflow.com/questions/6
         d["track_title"] = item["track"]["name"]
         d["artists"] = []
         for artist in item["track"]["artists"]:
-            d["artists"].appen(artist["name"])
+            d["artists"].append(artist["name"])
         d["popularity"] = item["track"]["popularity"]
         d["uri"] = item["track"]["uri"]
         d["duration"] = item["track"]["duration_ms"]
         dl_recently.append(d)
     return(pd.DataFrame(dl_recently))
+
 
 # %%  Get "a" playlist tracks
 def playlist_to_df(sp, playlist_id: str):
@@ -56,7 +52,6 @@ def playlist_to_df(sp, playlist_id: str):
     # example:
     playlist = user_playlist_to_df(sp, "37i9dQZF1DXaWf8ZIHreXF") # spotify "Dance Hits 2010s"
     """
-    
     playlist_tracks = sp.playlist_tracks(playlist_id)  # 2022 playlist
 
     dl_playlist = []
@@ -71,7 +66,9 @@ def playlist_to_df(sp, playlist_id: str):
         d["duration"] = item["track"]["duration_ms"]
         d["added_by"] = item["added_by"]["id"]
         d["added_at"] = item["added_at"]
+        dl_playlist.append(d)
     return(pd.DataFrame(dl_playlist))
+
 
 # %%  Top artists
 def top_artists_df(sp):
@@ -97,8 +94,8 @@ def top_artists_df(sp):
         d["popularity"] = item["popularity"]
         d["genres"] = item["genres"]
         dl_artists.append(d)
-    # df_artists =
     return(pd.DataFrame(dl_artists))
+
 
 # %%   Top tracks
 def top_tracks_df(sp, limit: int = 50):
@@ -115,8 +112,8 @@ def top_tracks_df(sp, limit: int = 50):
     # Example:
     top_tracks = user_top_tracks_df(sp)
     """
-    
     top_tracks = sp.current_user_top_tracks(limit=limit)
+    
     dl_top = []
     for item in top_tracks["items"]:
         d = {}
@@ -130,6 +127,7 @@ def top_tracks_df(sp, limit: int = 50):
         d["duration"] = item["duration_ms"]
         dl_top.append(d)
     return(pd.DataFrame(dl_top))
+
 
 # %%  Get song analysis
 def track_analysis_to_df(sp, audio_uri_list: list):

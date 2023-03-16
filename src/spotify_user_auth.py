@@ -16,11 +16,9 @@ import json
 import pandas as pd
 import spotipy
 import seaborn as sb
-
-# Alternatively, a local "package" of functions can be achieved through this:
-# import lib.spotify_to_df as sp_df
-# sp_df.top_tracks_df(sp, 10)
-# https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
+import lib.spotify_to_df as lib #local library
+    # lib.top_tracks_df(sp) 
+    # https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
 
 
 # %% set directory
@@ -52,6 +50,7 @@ sp_user_auth = spotipy.SpotifyOAuth(
     redirect_uri    =  sp_redirect,                   # redirect to....
     scope           =  sp_scopes)                     # access scope
 
+spotipy.c
 """
 PROBLEM WITH TOKEN AFTER PASSWORD RESET: 
     In my case the token had not expired, but was changed (probably because of 
@@ -81,6 +80,9 @@ Does not work with this code, hence the above
 # We set our access point to "sp" by authorizing with "sp_user_auth"
 
 sp = spotipy.Spotify(auth_manager = sp_user_auth)
+
+#sp_user_auth.get_auth_response()
+#sp_user_auth.get_authorization_code()
 
 # %%   Top tracks
 def top_tracks_df(limit: int = 50):
@@ -164,24 +166,31 @@ def track_analysis_to_df(audio_uri_list: list):
 # NO NEED TO LOAD THE API UNNECESSARIY
 # Check if we have stored the data
 # Else get and save the data 
+
+### My top tracks (mtt) - my most listened to tracks (so far this year) 
+#
 if os.path.exists("data/my_top_50.csv"): 
     mtt = pd.read_csv("data/my_top_50.csv")
 else: 
     # get my top 50 songs (so far: 2023.03.11)
-    mtt = top_tracks_df() 
+    mtt = lib.top_tracks_df(sp) 
     mtt = mtt.set_index(mtt.index+1)      # set new index
     mtt.to_csv("data/my_top_50.csv", index = False) # save it 
-    
-if os.path.exists("data/my_top_50_features.csv"):
+
+### my most listened to (mmlt) - top 50 tracks (so far this year)
+if os.path.exists("data/my_top_50_features.csv"): 
     msgf = pd.read_csv("data/my_top_50_features.csv")
 else:
     # a move basic feature pack (simpler to graph)    
-    msgf = sp.audio_features(mtt["uri"])        # get features
+    # my song general features
+    msgf = lib.audio_features(sp, mtt["uri"])        # get features
     msgf = pd.DataFrame(msgf)                   # dataframe features
     msgf = msgf.drop(["id","track_href", "analysis_url","type"], axis = 1) # drop useless columns 
     msgf = msgf.set_index(msgf.index+1)
     msgf.to_csv("data/my_top_50_features.csv", index = False) # save
-    
+
+#### My top track analysis (mtta) - 
+# My top 50 songs audio analysis
 if os.path.exists("data/my_top_50_specifics.csv"):
     mtta = pd.read_csv("data/my_top_50_specifics.csv")
 else:
@@ -196,12 +205,49 @@ else:
             mtta["culminative_time"][value] = mtta["culminative_time"][value-1] + mtta["time"][value]
     mtta.to_csv("data/my_top_50_specifics.csv", index = False)
 
+### Norway top 50 (nt50) songs
+# as of 16.03.2023 
+if os.path.exists("daata/norway_top_50-16.03.2023.csv"):
+    nt50 = pd.read_csv("data/norway_top_50-16.03.2023.csv")
+else: 
+    # https://open.spotify.com/playlist/37i9dQZEVXbJvfa0Yxg7E7
+    nt50 = lib.playlist_to_df(sp, "37i9dQZEVXbJvfa0Yxg7E7") # Get playlist to df
+    nt50 = nt50.set_index(nt50.index + 1)      # set new index
+    nt50.to_csv("data/norway_top_50-16.03.2023.csv")
+    
+    
+### TOP TRACKS 2022! 
+### world top tracks 2022 (wtt22)
+# only come with top 50 tracks
+if os.path.exists("data/top_tracks_world_2022.csv"):
+    wtt22 = pd.read_csv("data/top_tracks_world_2022.csv")
+else:
+    wtt22 = lib.playlist_to_df(sp, "37i9dQZF1DX18jTM2l2fJY")
+    wtt22 = wtt22.set_index(wtt22.index + 1)      # set new index
+    wtt22.to_csv("data/top_tracks_world_2022.csv")
+
+## my top tracks 2022 (mtt22) 
+# 
+if os.path.exists("data/my_top_tracks_2022.csv"):
+    mtt22 = pd.read_csv("data/my_top_tracks_2022.csv")
+else:
+    mtt22 = lib.playlist_to_df(sp, "37i9dQZF1DX18jTM2l2fJY")
+    mtt22 = mtt22.set_index(mtt22.index + 1)      # set new index
+    mtt22.to_csv("data/my_top_tracks_2022.csv")
+    
+    
+    
+    
+    
+# TOP TRACKS 2022  WORLD:  https://open.spotify.com/playlist/37i9dQZF1DX18jTM2l2fJY?si=616886cdaf1a401f
+# MY TOP TRACKS 2022:  https://open.spotify.com/playlist/37i9dQZF1F0sijgNaJdgit?si=1590ebb10e844b2f
 # %% Subset
+"""
 # get out my favorite song features
 # mtsf = my_top_song_features
 mtsf = mtta[mtta["song index"] == 0] # subset of my top song.
 
-"""
+
 ##### MAYBE NOT, BELOW
 # %%  Pivot dataframe for seaborn graph:
 # https://pandas.pydata.org/pandas-docs/stable/reference/api/pandas.wide_to_long.html
@@ -301,6 +347,7 @@ ax.fill_between(msgf_sub.index, msgf_sub["danceability"],.9)
 
 #ax.plot(msgf.index, msgf["tempo"], c ="purple", linewidth = 3)
 
+ax.plot(msgf_sub.index, msgf_sub["loudness"], linewidth = 3)
 ax.plot(msgf_10.index, np.log10(abs(msgf_10["loudness"])), linewidth = 3)
 ax.set_xticks(np.arange(1,51,1))
 
