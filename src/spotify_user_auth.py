@@ -10,6 +10,16 @@
 
 
 """
+# %% set directory
+if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"):  # School
+    path = "D:/coding/GitHub/a-asen/spotify_project"
+if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"):  # Home
+    path = "D:/_coding/GitHub/a-asen/spotify_project"
+
+os.chdir(path)  # change directory
+print(os.getcwd())  # get change
+
+
 # %% packages
 import os
 import json
@@ -17,20 +27,10 @@ import pandas as pd
 import spotipy
 import matplotlib.pyplot as plt
 import numpy as np
-
-# %% set directory
-if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"):  # School
-    path = "D:/coding/GitHub/a-asen/spotify_project"
-if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"):  # Home
-    path = "D:/_coding/GitHub/a-asen/spotify_project"
-
-import spotify_to_df as lib #local library
+import lib.spotify_to_df as lib #local library
     # lib.top_tracks_df(sp) 
     # https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
 
-
-os.chdir(path)  # change directory
-print(os.getcwd())  # get change
 
 # %%  Read Keys
 with open("access/access_token.json", "r") as f: # Get client ID and secret
@@ -150,16 +150,15 @@ def track_analysis_to_df(audio_uri_list: list):
 ### world top tracks 2022 (wtt22)
 # only come with top 50 tracks
 if os.path.exists("data/top_tracks_world_2022.csv"):
-    wtt22 = pd.read_csv("data/top_tracks_world_2022.csv")
+    wtt22 = pd.read_csv("data/top_tracks_world_2022.csv", index_col = 0) # Get col index. More pleasing to work with 
 else:
     wtt22 = lib.playlist_to_df(sp, "37i9dQZF1DX18jTM2l2fJY")
     wtt22 = wtt22.set_index(wtt22.index + 1)      # set new index
     wtt22.to_csv("data/top_tracks_world_2022.csv")
 
-
 ############            World top tracks 2022 FEATURES           ##############
 if os.path.exists("data/top_tracks_world_2022_features.csv"):
-    wtt22f = pd.read_csv("data/top_tracks_world_2022_features.csv")
+    wtt22f = pd.read_csv("data/top_tracks_world_2022_features.csv", index_col = 0)
 else:
     wtt22f = sp.audio_features(wtt22["uri"])
     wtt22f = pd.DataFrame(wtt22f)
@@ -172,20 +171,22 @@ else:
 ########                My Top Tracks 2022 (mtt22)                 ########## 
 # 
 if os.path.exists("data/my_top_tracks_2022.csv"):
-    mtt22 = pd.read_csv("data/my_top_tracks_2022.csv")
+    mtt22 = pd.read_csv("data/my_top_tracks_2022.csv", index_col = 0)
 else:
     mtt22 = lib.playlist_to_df(sp, "37i9dQZF1F0sijgNaJdgit")
     mtt22 = mtt22.set_index(mtt22.index + 1)      # set new index
     mtt22.to_csv("data/my_top_tracks_2022.csv")
+
 ########             My Top Tracks 2022 Features (mtt22f)            ##########
 if os.path.exists("data/my_top_tracks_2022_features.csv"):
-    mtt22f = pd.read_csv("data/my_top_tracks_2022_features.csv")
+    mtt22f = pd.read_csv("data/my_top_tracks_2022_features.csv", index_col = 0)
 else:
     mtt22f = sp.audio_features(mtt22["uri"])
     mtt22f = pd.DataFrame(mtt22f)
     mtt22f = mtt22f.drop(["id","track_href", "analysis_url","type"], axis = 1) # drop useless columns
     mtt22f = mtt22f.set_index(mtt22f.index + 1)
     mtt22f.to_csv("data/my_top_tracks_2022_features.csv")
+
 
 #%%    
 ###############################################################################
@@ -210,54 +211,80 @@ Why am i missing help information on "ax" variable:
 """
 #%% data shorthand 
 
-dp = mtt22f.iloc[0:50,]
-dp2 = wtt22f
+dp = mtt22f.iloc[0:20,]
+dp2 = wtt22f.iloc[0:20,]
 
 #%% Quick figure of differences
 fig, ax = plt.subplots()
 
-
-# dance 
+# DATA PLOTTING
 #  https://www.color-hex.com/color/00a170
 plt.cla()
 ax.plot(dp.index, dp["danceability"], c ="#32b38c", linewidth = 3)
 ax.plot(dp2.index, dp2["danceability"], c ="#008059", linewidth = 2, linestyle = "dotted")
-# plot changes:
-ax.set_yticks(np.arange(0.0,1.1,0.1))
-xtick = np.arange(5,51,5).tolist()
-xtick.insert(0,1)
+
+####   AX CHANGES
+ax.back
+ax.grid()
+ax.set_yticks(np.arange(0.3,1.1,0.1))
+xtick = np.arange(1,21,1).tolist()
+# xtick.insert(0,1)
 ax.set_xticks(xtick)
-plt.ylim(0.3,1) # https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
-plt.xlim(1,50)  # but why plt and not ax/fig?
-fig.legend(loc = "right", labels =["World Top 50", "My Top 50"])
+plt.ylim(0.35,1.05) # https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
+plt.xlim(0.5,20.5)  # but why plt and not ax/fig?
+
+# INFO
+fig.legend(loc = "right", labels = ["World Top 20", "My Top 20"])
+ax.set_title("Danceability", size = 16)
+
+
 # ax.legend adds inside the AXES (the plot)
 # ax.legend(labels = ["World Top 50", "My Top 50"], loc = "outside upper right")
-ax.set_title("Danceability", size = 16)
 
 # mean line?  Not that interesting ? 
 ax.hlines(np.mean(dp["danceability"]), 1,50) 
 ax.hlines(np.mean(dp2["danceability"]), 1,50)
 
 
+
+
 # speechiness
 ax.plot(dp.index, dp["speechiness"], c = "blue")
+
 # energy
 ax.plot(dp.index, dp["energy"], c ="yellow", linewidth = 3)
+
 # valence
 ax.plot(dp.index, dp["valence"], c ="black", linewidth = 3)
+ax.plot(dp2.index, dp2["valence"], c ="black", linewidth = 3, linestyle = "dotted")
 
 #useless
 ax.plot(dp.index, dp["instrumentalness"], c ="red", linewidth = 3)
 ax.plot(dp.index, dp["acousticness"], c ="purple", linewidth = 3)
 
 
-#%% HIST 
-fig2, ax2 = plt.subplots()
-plt.cla()
-ax2.hist(dp["danceability"], alpha = 0.7, color = "blue")
-ax2.bar(dp["danceability"], alpha = 0.7, color = "blue")
-ax2.hist(dp2["danceability"], alpha = 0.7, color = "red")
 
+#%%  BOXPLOT
+fig2, ax2 = plt.subplots()
+
+ax2.boxplot([dp["danceability"],
+             dp2["danceability"],
+             dp["valence"], 
+            dp2["valence"]])
+ax.title("")
+
+#%% HIST 
+dp = mtt22f.iloc[0:50]
+dp2 = wtt22f.iloc[0:50]
+
+fig3, ax3 = plt.subplots()
+plt.cla()
+ax3.hist(dp["danceability"], alpha = 0.4, color = "#4dac26")
+ax3.hist(dp2["danceability"], alpha = 0.4, color = "#d0278b")
+    
+
+
+ax3.bar( height = dp["danceability"], alpha = 0.7, color = "blue")
 plt.hist(dp["energy"],)
 plt.hist(dp2["energy"])
 #%% VERTICAL PLOT
