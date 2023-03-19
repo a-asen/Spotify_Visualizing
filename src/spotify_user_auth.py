@@ -1,16 +1,14 @@
 # -*- coding: utf-8 -*-
 """
-
-
 ### To-do ###
 - [x] make culminative time ! so we can see whe nin the song we are lookin at 
 
-
 - [ ] Remixed songs do not have a tag for "remixed", they are all 
 
-
 """
-# %% set directory
+# %% Quick run
+#### Set environment
+import os
 if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"):  # School
     path = "D:/coding/GitHub/a-asen/spotify_project"
 if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"):  # Home
@@ -19,20 +17,19 @@ if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"):  # Home
 os.chdir(path)  # change directory
 print(os.getcwd())  # get change
 
-
-# %% packages
-import os
+#### Packages
 import json
 import pandas as pd
 import spotipy
 import matplotlib.pyplot as plt
 import numpy as np
+import seaborn as sb
 import lib.spotify_to_df as lib #local library
     # lib.top_tracks_df(sp) 
+    # https://codeigo.com/python/import-function-from-file # better & more
     # https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
 
-
-# %%  Read Keys
+#### Read Keys & accessories
 with open("access/access_token.json", "r") as f: # Get client ID and secret
     access_token = json.load(f)
 
@@ -44,7 +41,7 @@ sp_scopes = "user-read-playback-state,user-read-currently-playing,user-read-play
 # https://developer.spotify.com/documentation/general/guides/authorization/scopes/
 # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
 
-# %%   Spotify Authentication
+#### User Authentication
 # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
 sp_user_auth = spotipy.SpotifyOAuth(
     client_id       =  access_token["Client_ID"],     # client ID
@@ -54,92 +51,17 @@ sp_user_auth = spotipy.SpotifyOAuth(
 
 #sp_user_auth.get_auth_response()
 
-# %%  Set the "auth_manager" to our credentials according to the given "auth" access
+#### Authentication Call
+# Set the "auth_manager" to our credentials according to the given "auth" access
 # https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
 # We set our access point to "sp" by authorizing with "sp_user_auth"
 
 sp = spotipy.Spotify(auth_manager = sp_user_auth)
 
-#sp_user_auth.get_auth_response()
+#sp_user_auth.get_auth_response() # these should authorize if it doesnt happen automatically
 #sp_user_auth.get_authorization_code()
 
-# %%   Top tracks
-def top_tracks_df(limit: int = 50, time_range = str):
-    """
-    Get users top tracks.
-     - Input:  Amount of top tracks
-     - Output: Pandas dataframe
-     
-    # Example:
-    top_tracks = user_top_tracks_df()
-    """
-    
-    top_tracks = sp.current_user_top_tracks(limit=limit, time_range = time_range)
-    dl_top = []
-    for item in top_tracks["items"]:
-        d = {}
-        d["track_title"] = item["name"]
-        da = []
-        for artist in item["artists"]:
-            da.append(artist["name"])
-        d["artists"] = da
-        d["popularity"] = item["popularity"]
-        d["uri"] = item["uri"]
-        d["duration"] = item["duration_ms"]
-        dl_top.append(d)
-    return(pd.DataFrame(dl_top))
-
-#%%
-def track_analysis_to_df(audio_uri_list: list):
-    """
-    Do an audio analysis of a list of songs (ID, URI, URL)
-     - Input:  List of song (ID, URI or URL)
-     - Output: Pandas dataframe
-     
-    # Example:
-    track_analysis = track_analysis_to_df(<my_top_tracks["uri"]>)
-    """
-    
-    data_list = []  # where we put our informatio
-    for enu, song in enumerate(audio_uri_list):  # For each
-        analysis = sp.audio_analysis(song)
-        for enu2, item in enumerate(analysis["segments"]):
-            d = {}
-            d["song index"]     = enu
-            d["track index"]    = enu2
-            d["time"]           = item["duration"]
-            d["loudness_time"]  = item["loudness_max_time"]
-            d["loudness_max"]   = item["loudness_max"]
-           # d["loudness_end"]    =  item["loudness_end"] # doesnt add anything apparently
-            d["pitch-1"]        = item["pitches"][0]
-            d["pitch-2"]        = item["pitches"][1]
-            d["pitch-3"]        = item["pitches"][2]
-            d["pitch-4"]        = item["pitches"][3]
-            d["pitch-5"]        = item["pitches"][4]
-            d["pitch-6"]        = item["pitches"][5]
-            d["pitch-7"]        = item["pitches"][6]
-            d["pitch-8"]        = item["pitches"][7]
-            d["pitch-9"]        = item["pitches"][8]
-            d["pitch-10"]       = item["pitches"][9]
-            d["pitch-11"]       = item["pitches"][10]
-            d["pitch-12"]       = item["pitches"][11]
-            d["timbre-1"]       = item["timbre"][0]
-            d["timbre-2"]       = item["timbre"][1]
-            d["timbre-3"]       = item["timbre"][2]
-            d["timbre-4"]       = item["timbre"][3]
-            d["timbre-5"]       = item["timbre"][4]
-            d["timbre-6"]       = item["timbre"][5]
-            d["timbre-7"]       = item["timbre"][6]
-            d["timbre-8"]       = item["timbre"][7]
-            d["timbre-9"]       = item["timbre"][8]
-            d["timbre-10"]      = item["timbre"][9]
-            d["timbre-11"]      = item["timbre"][10]
-            d["timbre-12"]      = item["timbre"][11]
-            data_list.append(d) # append this songs features to the list 
-    return(pd.DataFrame(data_list))
-
-
-# %%  Read  //  Get data
+####  Read  //  Get data
 
 # NO NEED TO LOAD THE API UNNECESSARIY
 # Check if we have stored the data
@@ -188,10 +110,9 @@ else:
     mtt22f.to_csv("data/my_top_tracks_2022_features.csv")
 
 
-#%%    
-###############################################################################
-####                            Graphs                                     ####
-###############################################################################
+########################
+#### ||||   Graph   ||||
+########################
 """
 # double plotting in matplotlib: https://matplotlib.org/stable/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py
 # https://stackoverflow.com/a/8228808
@@ -209,163 +130,131 @@ Why am i missing help information on "ax" variable:
 # compare my music features to top 50 of norway ?
 # https://open.spotify.com/playlist/37i9dQZEVXbJvfa0Yxg7E7?si=94da68a1315a418f
 """
-#%% data shorthand 
 
-dp = mtt22f.iloc[0:20,]
-dp2 = wtt22f.iloc[0:20,]
+# %% Lineplot 
+fig1, ax1 = plt.subplots()
 
-#%% Quick figure of differences
-fig, ax = plt.subplots()
+#### Data shorthand 
+lineplot_my = mtt22f.iloc[0:20,]
+lineplot_world = wtt22f.iloc[0:20,]
 
+plt.figure(1)
 # DATA PLOTTING
 #  https://www.color-hex.com/color/00a170
-plt.cla()
-ax.plot(dp.index, dp["danceability"], c ="#32b38c", linewidth = 3)
-ax.plot(dp2.index, dp2["danceability"], c ="#008059", linewidth = 2, linestyle = "dotted")
+ax1.plot(lineplot_my.index, lineplot_my["danceability"], c ="#32b38c", linewidth = 3)
+ax1.plot(lineplot_world.index, lineplot_world["danceability"], c ="red", linewidth = 2, linestyle = "dotted")
 
-####   AX CHANGES
-ax.back
-ax.grid()
-ax.set_yticks(np.arange(0.3,1.1,0.1))
-xtick = np.arange(1,21,1).tolist()
-# xtick.insert(0,1)
-ax.set_xticks(xtick)
-plt.ylim(0.35,1.05) # https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
-plt.xlim(0.5,20.5)  # but why plt and not ax/fig?
+####   ax1 CHANGES
+ax1.set_facecolor("lightgrey")
+ax1.grid()
+ax1.set_yticks(np.arange(0.4,1,0.05))
+ax1.set_xticks(np.arange(1,21,1))
+plt.ylim(0.4,0.95) # https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
+plt.xlim(1,20)  # but why plt and not ax1/fig?
 
 # INFO
-fig.legend(loc = "right", labels = ["World Top 20", "My Top 20"])
-ax.set_title("Danceability", size = 16)
+fig1.legend(loc = "right", labels = ["My Top 20","World Top 20"])
+ax1.set_title("Danceability", size = 16)
 
+ax1.set_xlabel("Song rank", size = 12)
+ax1.set_ylabel("Danceability score", size = 12)
 
-# ax.legend adds inside the AXES (the plot)
-# ax.legend(labels = ["World Top 50", "My Top 50"], loc = "outside upper right")
+# %%  BOXPLOT
+#### Data
+# My data
+boxplot_my = mtt22f.iloc[0:50]
+boxplot_my = boxplot_my.reset_index() # index column
+boxplot_my = boxplot_my.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness"])
+boxplot_my = pd.melt(frame = boxplot_my,
+             id_vars = "index", value_vars = boxplot_my.columns[0:14], 
+             var_name = "variable", value_name = "value")
 
-# mean line?  Not that interesting ? 
-ax.hlines(np.mean(dp["danceability"]), 1,50) 
-ax.hlines(np.mean(dp2["danceability"]), 1,50)
+means = boxplot_my.groupby("variable")["value"].mean().reset_index()
+means = means.sort_values("value")
+boxplot_my["variable"] = boxplot_my["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+boxplot_my = boxplot_my.sort_values("variable")
+boxplot_my["from"] = "My top"
 
+# World data
+boxplot_world = wtt22f.iloc[0:50]
+boxplot_world = boxplot_world.reset_index() # index column
+boxplot_world = boxplot_world.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness"])
+boxplot_world["loudness"] = np.log10(np.sqrt(boxplot_world["loudness"]**2))
+boxplot_world = pd.melt(frame = boxplot_world,
+             id_vars = "index", value_vars = boxplot_world.columns[0:14], 
+             var_name = "variable", value_name = "value")
 
+means = boxplot_world.groupby("variable")["value"].mean().reset_index()
+means = means.sort_values("value")
+boxplot_world["variable"] = boxplot_world["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+boxplot_world = boxplot_world.sort_values("variable")
+boxplot_world["from"] = "World top"
 
+dp3 = pd.concat([boxplot_my, boxplot_world], axis = 0)
 
-# speechiness
-ax.plot(dp.index, dp["speechiness"], c = "blue")
-
-# energy
-ax.plot(dp.index, dp["energy"], c ="yellow", linewidth = 3)
-
-# valence
-ax.plot(dp.index, dp["valence"], c ="black", linewidth = 3)
-ax.plot(dp2.index, dp2["valence"], c ="black", linewidth = 3, linestyle = "dotted")
-
-#useless
-ax.plot(dp.index, dp["instrumentalness"], c ="red", linewidth = 3)
-ax.plot(dp.index, dp["acousticness"], c ="purple", linewidth = 3)
-
-
-
-#%%  BOXPLOT
+#### Figure information
 fig2, ax2 = plt.subplots()
+plt.figure(2)
+ax2 = sb.boxplot(dp3, y = "variable", x = "value", hue = "from", dodge = True, ax=ax2)
+sb.despine(trim = True, ax=ax2)
+ax2.grid(axis = "x", alpha = .7, linestyle = "solid") 
+ax2.set_axisbelow(True) # draw lines behind
+ax2.set_xticks(np.arange(0.0,1.1,0.1))
 
-ax2.boxplot([dp["danceability"],
-             dp2["danceability"],
-             dp["valence"], 
-            dp2["valence"]])
-ax.title("")
+ax2.set_xlabel("Percent confidence", size = 16, labelpad = 16)
+#fig2.suptitle("Music features over 'My top' and 'World top' tracks", size = 22)
+ax2.set_title("Music features over 'My top' and 'World top' tracks", size = 22, pad = 18) # 
 
-#%% HIST 
-dp = mtt22f.iloc[0:50]
-dp2 = wtt22f.iloc[0:50]
+ax2.legend(title = "", fontsize = 12) 
+ax2.set_yticklabels(["Instrumentalness", "Speechiness", "Acousticness", "Liveness", "Valence", "Danceability", "Energy"])
+ax2.set_xticklabels(np.arange(0,101,10))
 
+#ax2.tick_params(labelsize = 12) 
+
+#%%  CORRS? 
 fig3, ax3 = plt.subplots()
+
+dp = mtt22f[0:50]
+dp2 = wtt22f
+dp["loudness"] = np.log10(np.sqrt(dp["loudness"]**2))
+dp2["loudness"] = np.log10(np.sqrt(dp2["loudness"]**2))
+
+#####
+plt.plot(dp.index[0:21], dp["loudness"][0:21],) # plot loudness on a graph? 
+
+dp.corr() # LUL that was easy 
+
+s.pearsonr(dp["loudness"], dp["energy"])
+s.pearsonr(dp["loudness"], dp["danceability"])
+s.pearsonr(dp["loudness"], dp["speechiness"])
+
+
+plt.scatter(dp["energy"], dp["loudness"])
+plt.scatter(dp["energy"], dp["danceability"])
+
+plt.plot(dp["energy"], )
+#######
+
+# HIST SUCK
+# rather do boxplot
 plt.cla()
-ax3.hist(dp["danceability"], alpha = 0.4, color = "#4dac26")
-ax3.hist(dp2["danceability"], alpha = 0.4, color = "#d0278b")
-    
-
-
-ax3.bar( height = dp["danceability"], alpha = 0.7, color = "blue")
-plt.hist(dp["energy"],)
-plt.hist(dp2["energy"])
-#%% VERTICAL PLOT
-fig2, (ax1, ax2) = plt.subplots(1,2) # to vertical
-
-
-ax1.plot(dp.index, dp["danceability"])
-# Using "dp" (data_plotting) to be able to quickly change data input in graph 
- 
-plt.cla()
-# set background colour 
-ax.set_facecolor("#e0e0e0")
-ax.grid()
-ax.set_xticks(np.arange(0.0,1.1,0.1))
-ax.set_xtitle()
-ax.set_yticks(np.arange(0.0,1.1,0.1))
-
-
-
-
-
-ax.fill_between(dp.index, dp["danceability"], dp["speechiness"])
-ax.fill_between(dp.index, dp["speechiness"])
-ax.fill_between(dp.index, dp["danceability"],.9)
-
-#ax.plot(msgf.index, msgf["tempo"], c ="purple", linewidth = 3)
-
-ax.plot(dp.index, dp["loudness"], linewidth = 3)
-ax.plot(msgf_10.index, np.log10(abs(msgf_10["loudness"])), linewidth = 3)
-ax.set_xticks(np.arange(1,51,1))
-
-
-ax.plot(msgf_10.index, msgf_10["danceability"])
-
+plt.hist(dp["duration_ms"]/1000/60, alpha = .5, bins = 20)
+plt.hist(dp2["duration_ms"]/1000/60, alpha = .5, bins = 20)
+np.log10(dp["duration_ms"])
 
 plt.cla()
+plt.boxplot([dp["tempo"],dp2["tempo"]] )#alpha = .5)
+
+plt.boxplot([dp["duration_ms"]/1000/60,dp2["duration_ms"]/1000/60])
+plt.boxplot(, position = (1, 2))#alpha = .5)
+
+import scipy.stats as s
+val = s.ttest_ind(dp["tempo"], dp2["tempo"])
+s.ttest_ind(dp["duration_ms"]/1000/60, dp2["duration_ms"]/1000/60)
+plt.hist(mtt22f["loudness"])
 
 
 
-
-# %%  IF I WANT, I can do more "fine grane analysis of a specific track:
-special = track_analysis_to_df(["5QdATOQJp1kififgPZYQ2Q"])
-
-sp.audio_analysis("5QdATOQJp1kififgPZYQ2Q")
-# ANALYSIS OF: 5QdATOQJp1kififgPZYQ2Q
-
-# add loudness - do something fancy here
-ax.plot(mtsf["culminative_time"], mtsf["loudness_max"])
-
-
-ax.set_yticks(np.arange(-60,0,5))
-ax.set_title("Loudness over time units")
-ax.set_ylabel("Loudness")
-ax.set_title("")
-ax
-plt.cla()
-
-fig
-
-ax.plot(mtsf["culminative_time"], mtsf["timbre-2"]) # add timbre 2
-ax.plot(mtsf["culminative_time"], mtsf["timbre-3"]) # add timbre 3
-
-
-# pitch to plot 
-ax.plot(mtsf["culminative_time"], mtsf["pitch-1"]) # add
-
-# log transform to fit pitch in plot: 
-# https://www.geeksforgeeks.org/log-and-natural-logarithmic-value-of-a-column-in-pandas-python/
-np.log(mtsf.loc[:,"timbre-1":"timbre-12"])
-np.log(mtsf.loc[:,"timbre-2"])
-
-
-# grand mean over pitch
-# https://statisticsglobe.com/calculate-mean-python
-ax.plot(mtsf["culminative_time"], mtsf.loc[:,"timbre-1":"timbre-12"].mean(axis=1))
-
-
-
-
-# SET OTHER INFORMATION TO "AX"
-# ax.set_yticks(np.arange(-200,100,20))
 
 
 

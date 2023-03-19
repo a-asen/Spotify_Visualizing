@@ -139,7 +139,7 @@ sb.lineplot(mtsf_long.loc[mtsf_long.value_index.isin(vals)],
            y = "timbre", "loudness_max",
            hue = "value_index",)
 
-#%%<<<<<<zzzz
+#<<<<<<zzzz
 f2, ax1 = sb
 
 test = sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-1", kind = "line")
@@ -155,3 +155,101 @@ sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-2", kind="l
 sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-3", kind="line")
 ### ---
 """
+
+# %% VISUALIZE #### 
+plt.show()
+
+#%% HIST 
+
+fig3, ax3 = plt.subplots()
+plt.cla()
+ax3.hist(dp["danceability"], alpha = 0.4, color = "#4dac26")
+ax3.hist(dp2["danceability"], alpha = 0.4, color = "#d0278b")
+    
+
+
+ax3.bar( height = dp["danceability"], alpha = 0.7, color = "blue")
+plt.hist(dp["energy"],)
+plt.hist(dp2["energy"])
+#%% VERTICAL PLOT
+fig2, (ax1, ax2) = plt.subplots(1,2) # to vertical
+
+
+ax1.plot(dp.index, dp["danceability"])
+# Using "dp" (data_plotting) to be able to quickly change data input in graph 
+ 
+plt.cla()
+# set background colour 
+ax.set_facecolor("#e0e0e0")
+ax.grid()
+ax.set_xticks(np.arange(0.0,1.1,0.1))
+ax.set_xtitle()
+ax.set_yticks(np.arange(0.0,1.1,0.1))
+
+
+
+
+
+ax.fill_between(dp.index, dp["danceability"], dp["speechiness"])
+ax.fill_between(dp.index, dp["speechiness"])
+ax.fill_between(dp.index, dp["danceability"],.9)
+
+#ax.plot(msgf.index, msgf["tempo"], c ="purple", linewidth = 3)
+
+ax.plot(dp.index, dp["loudness"], linewidth = 3)
+ax.plot(msgf_10.index, np.log10(abs(msgf_10["loudness"])), linewidth = 3)
+ax.set_xticks(np.arange(1,51,1))
+
+
+ax.plot(msgf_10.index, msgf_10["danceability"])
+
+
+plt.cla()
+
+
+
+
+# %%  IF I WANT, I can do more "fine grane analysis of a specific track:
+special = track_analysis_to_df(["5QdATOQJp1kififgPZYQ2Q"])
+
+sp.audio_analysis("5QdATOQJp1kififgPZYQ2Q")
+# ANALYSIS OF: 5QdATOQJp1kififgPZYQ2Q
+
+# add loudness - do something fancy here
+ax.plot(mtsf["culminative_time"], mtsf["loudness_max"])
+
+
+ax.set_yticks(np.arange(-60,0,5))
+ax.set_title("Loudness over time units")
+ax.set_ylabel("Loudness")
+ax.set_title("")
+ax
+plt.cla()
+
+fig
+
+ax.plot(mtsf["culminative_time"], mtsf["timbre-2"]) # add timbre 2
+ax.plot(mtsf["culminative_time"], mtsf["timbre-3"]) # add timbre 3
+
+
+# pitch to plot 
+ax.plot(mtsf["culminative_time"], mtsf["pitch-1"]) # add
+
+# log transform to fit pitch in plot: 
+# https://www.geeksforgeeks.org/log-and-natural-logarithmic-value-of-a-column-in-pandas-python/
+np.log(mtsf.loc[:,"timbre-1":"timbre-12"])
+np.log(mtsf.loc[:,"timbre-2"])
+
+
+# grand mean over pitch
+# https://statisticsglobe.com/calculate-mean-python
+ax.plot(mtsf["culminative_time"], mtsf.loc[:,"timbre-1":"timbre-12"].mean(axis=1))
+
+
+
+
+# SET OTHER INFORMATION TO "AX"
+# ax.set_yticks(np.arange(-200,100,20))
+
+
+
