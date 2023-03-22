@@ -11,8 +11,8 @@
 import os
 if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"):  # School
     path = "D:/coding/GitHub/a-asen/spotify_project"
-if os.path.exists("D:/_coding/GitHub/a-asen/spotify_project"):  # Home
-    path = "D:/_coding/GitHub/a-asen/spotify_project"
+if os.path.exists("D:/_coding/GitHub/a-asen/Spotify_Visualizing"):  # Home
+    path = "D:/_coding/GitHub/a-asen/Spotify_Visualizing"
 
 os.chdir(path)  # change directory
 print(os.getcwd())  # get change
