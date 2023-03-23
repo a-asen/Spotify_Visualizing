@@ -226,16 +226,19 @@ dp["loudness"] = np.log10(np.sqrt(dp["loudness"]**2))
 dp2["loudness"] = np.log10(np.sqrt(dp2["loudness"]**2))
 dp = dp.drop(columns = ["key", "mode", "uri","tempo","duration_ms","time_signature"])
 
-test = dp.corr()
-test.a
+df = dp.corr() # create a correlation matrix
 
-extremes = dp.values<0.05
-labels = test.applymap(lambda v: v if v < 0.05 else ' ')
+mask = np.triu(np.ones_like(df, dtype=bool))         # mask (only half of all corrs)
+cmap = sb.diverging_palette(230, 20, as_cmap=True)   # colour map
 
-cmap = sb.diverging_palette(230, 20, as_cmap=True)
-mask = np.triu(np.ones_like(test, dtype=bool))
-sb.heatmap(test, mask = mask, cmap = cmap, linewidths=.5, annot = labels, fmt = "")
+plt.clf()
+ax3 = sb.heatmap(df, mask = mask, cmap = cmap, linewidths=.5, annot = True,)
+ax3.xaxis.tick_top() # Flip to top
+plt.xticks(rotation=25) # rotate
+ax3.grid(which="minor")
 
+
+#%%
 #####
 plt.plot(dp.index[0:21], dp["loudness"][0:21],) # plot loudness on a graph? 
 dp.columns
@@ -255,24 +258,6 @@ plt.scatter(dp["energy"], dp["danceability"])
 
 plt.plot(dp["energy"], )
 #######
-
-# HIST SUCK
-# rather do boxplot
-plt.cla()
-plt.hist(dp["duration_ms"]/1000/60, alpha = .5, bins = 20)
-plt.hist(dp2["duration_ms"]/1000/60, alpha = .5, bins = 20)
-np.log10(dp["duration_ms"])
-
-plt.cla()
-plt.boxplot([dp["tempo"],dp2["tempo"]] )#alpha = .5)
-
-plt.boxplot([dp["duration_ms"]/1000/60,dp2["duration_ms"]/1000/60])
-plt.boxplot(, position = (1, 2))#alpha = .5)
-
-val = s.ttest_ind(dp["tempo"], dp2["tempo"])
-s.ttest_ind(dp["duration_ms"]/1000/60, dp2["duration_ms"]/1000/60)
-plt.hist(mtt22f["loudness"])
-
 
 
 

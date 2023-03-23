@@ -253,3 +253,14 @@ ax.plot(mtsf["culminative_time"], mtsf.loc[:,"timbre-1":"timbre-12"].mean(axis=1
 
 
 
+#%%  Corr matrix
+labels = df.applymap(lambda v: v if v < 0.05 else ' ')
+
+# We can apply over multiple 
+pvals = df.corr(method=lambda x, y: s.pearsonr(x, y)[1])# < 0.05
+
+# Create significant correlational markers 
+p_values = np.tril(df.corr(method='pearson'), k=-1)
+t1 = np.abs(p_values) < 0.05 # condition one 
+t2 = np.abs(p_values) == 1   # condition two
+mask = np.logical_or(t1,t2)  # combine 
