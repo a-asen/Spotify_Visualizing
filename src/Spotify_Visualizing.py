@@ -7,15 +7,11 @@
 # %% Quick run
 #### Set environment
 import os
-if os.path.exists("D:/coding/GitHub/a-asen/spotify_project"):  # School
-    path = "D:/coding/GitHub/a-asen/spotify_project"
-if os.path.exists("D:/_coding/GitHub/a-asen/Spotify_Visualizing"):  # Home
-    path = "D:/_coding/GitHub/a-asen/Spotify_Visualizing"
-
-os.chdir(path)  # change directory
+test = os.path.abspath(__file__) # get location of this script
+os.chdir(os.path.dirname(os.path.dirname(test))) # change the working directory to two levels above file
 print(os.getcwd())  # get change
 
-#### Packages
+#### Load Packages
 import json
 import pandas as pd
 import spotipy
@@ -30,6 +26,7 @@ import lib.spotify_to_df as lib #local library
 #### Read Keys & accessories
 with open("access/access_token.json", "r") as f: # Get client ID and secret
     access_token = json.load(f)
+
 
 # Redirect link:
 sp_redirect = "http://localhost:8888/callback"

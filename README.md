@@ -10,11 +10,12 @@ The script checks if the data is saved in the local "data" folder and retreives 
 
 The data consists of both the my and the worlds top songs (100 and 50 respectively) and data regarding the features of each playlist. 
 
-For the visualizing part below, only the data "my_top_tracks_2022.csv", "my_top_tracks_2022_features.csv", "top_tracks_world_2022.csv" and "top_tracks_world_2022.csv" are used. Although some additional data can be fond there
 
-All plots should be reproducible by cloning the repositry and running the script. It is important to change the working directory to where you have saved the clone. From there, the data should automatically be loaded, and three plots should be generated. 
+Running the main script "Spotify_Visualizing.py" under the "src" folder should do all the work: It will (1) get set the working directory relative to the position of the script, (2) read all the data necessary to create the plots and then (3) create three different plots. 
 
 ## Visualizing
+For the visualizing part below, only the data "my_top_tracks_2022.csv", "my_top_tracks_2022_features.csv", "top_tracks_world_2022.csv" and "top_tracks_world_features_2022.csv" are used. Although some additional data can be fond there
+
 For the visualizing part, we plot the track feautres of each playlist against each other.
 
 ### First plot
