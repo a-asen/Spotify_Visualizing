@@ -164,7 +164,7 @@ ax1.set_ylabel("Danceability score", size = 12)
 # My data
 boxplot_my = mtt22f.iloc[0:50]
 boxplot_my = boxplot_my.reset_index() # index column
-boxplot_my = boxplot_my.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness"])
+boxplot_my = boxplot_my.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness", "loudness"])
 boxplot_my = pd.melt(frame = boxplot_my,
              id_vars = "index", value_vars = boxplot_my.columns[0:14], 
              var_name = "variable", value_name = "value")
@@ -178,8 +178,8 @@ boxplot_my["from"] = "My top"
 # World data
 boxplot_world = wtt22f.iloc[0:50]
 boxplot_world = boxplot_world.reset_index() # index column
-boxplot_world = boxplot_world.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness"])
-boxplot_world["loudness"] = np.log10(np.sqrt(boxplot_world["loudness"]**2))
+boxplot_world = boxplot_world.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness", "loudness"])
+#boxplot_world["loudness"] = np.log10(np.sqrt(boxplot_world["loudness"]**2))
 boxplot_world = pd.melt(frame = boxplot_world,
              id_vars = "index", value_vars = boxplot_world.columns[0:14], 
              var_name = "variable", value_name = "value")
@@ -192,7 +192,12 @@ boxplot_world["from"] = "World top"
 
 dp3 = pd.concat([boxplot_my, boxplot_world], axis = 0)
 
-#### Figure information
+
+###  VIOLIN PLOT -- 
+# plt.cla()
+# sb.violinplot(dp3, y = "variable", x = "value", hue = "from", width = 1)
+
+#### BOXPLOT -- Figure information
 fig2, ax2 = plt.subplots()
 plt.figure(2)
 ax2 = sb.boxplot(dp3, y = "variable", x = "value", hue = "from", dodge = True, ax=ax2)
@@ -211,22 +216,38 @@ ax2.set_xticklabels(np.arange(0,101,10))
 
 #ax2.tick_params(labelsize = 12) 
 
-#%%  CORRS? 
+#%%  CORRELATION
+import scipy.stats as s
 fig3, ax3 = plt.subplots()
 
 dp = mtt22f[0:50]
 dp2 = wtt22f
 dp["loudness"] = np.log10(np.sqrt(dp["loudness"]**2))
 dp2["loudness"] = np.log10(np.sqrt(dp2["loudness"]**2))
+dp = dp.drop(columns = ["key", "mode", "uri","tempo","duration_ms","time_signature"])
+
+test = dp.corr()
+test.a
+
+extremes = dp.values<0.05
+labels = test.applymap(lambda v: v if v < 0.05 else ' ')
+
+cmap = sb.diverging_palette(230, 20, as_cmap=True)
+mask = np.triu(np.ones_like(test, dtype=bool))
+sb.heatmap(test, mask = mask, cmap = cmap, linewidths=.5, annot = labels, fmt = "")
 
 #####
 plt.plot(dp.index[0:21], dp["loudness"][0:21],) # plot loudness on a graph? 
-
+dp.columns
 dp.corr() # LUL that was easy 
-
+dp.columns
 s.pearsonr(dp["loudness"], dp["energy"])
 s.pearsonr(dp["loudness"], dp["danceability"])
 s.pearsonr(dp["loudness"], dp["speechiness"])
+s.pearsonr(dp["loudness"], dp["valence"])
+s.pearsonr(dp["loudness"], dp["instrumentalness"])
+s.pearsonr(dp["loudness"], dp["liveness"])
+s.pearsonr(dp["loudness"], dp["tempo"])
 
 
 plt.scatter(dp["energy"], dp["loudness"])
@@ -248,7 +269,6 @@ plt.boxplot([dp["tempo"],dp2["tempo"]] )#alpha = .5)
 plt.boxplot([dp["duration_ms"]/1000/60,dp2["duration_ms"]/1000/60])
 plt.boxplot(, position = (1, 2))#alpha = .5)
 
-import scipy.stats as s
 val = s.ttest_ind(dp["tempo"], dp2["tempo"])
 s.ttest_ind(dp["duration_ms"]/1000/60, dp2["duration_ms"]/1000/60)
 plt.hist(mtt22f["loudness"])
