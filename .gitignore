@@ -1,2 +1,4 @@
 #*json
-access/
+access/*.json
+.cache*
+src/.cache*

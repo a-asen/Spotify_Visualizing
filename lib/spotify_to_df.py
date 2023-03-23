@@ -7,33 +7,33 @@ import pandas as pd
 def last_played_df(sp, limit: int = 50): # https://stackoverflow.com/questions/61893276/can-i-define-both-functions-arguments-default-value-and-data-type-in-python
     """
     Get users recently played songs.
-     - Input: 
-         1. sp = spotify authorization call
-         2. The amount of recently (standard 50)
+    - Input: 
+        - sp: Spotify authorization object (user)
+        - limit: Amount of tracks to retrieve (max 50)
      - Output: Pandas Dataframe 
     
     NOTE:
-    This function require user authentication access! 
+    This function require user authentication object ( see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 ) 
     
     # Example: 
     my_recently_played = last_played_df(sp)
     """
        
-    user_recently_played = sp.current_user_recently_played(
-        limit=limit)  # get users last played (limit = 50)
-    dl_recently = []
-    for item in user_recently_played["items"]:
-        d = {}
-        d["played_time"] = item["played_at"]
-        d["track_title"] = item["track"]["name"]
+    user_recently_played = sp.current_user_recently_played(limit=limit)  # get users last played (limit = 50)
+    
+    dl_recently = []                            # Empty list
+    for item in user_recently_played["items"]:  # Parse dictionary
+        d = {}                                      # New dict
+        d["played_time"] = item["played_at"]        # Get play time
+        d["track_title"] = item["track"]["name"]    # Get track title
         d["artists"] = []
-        for artist in item["track"]["artists"]:
+        for artist in item["track"]["artists"]:     # Get each artist to a list in a dict
             d["artists"].append(artist["name"])
-        d["popularity"] = item["track"]["popularity"]
-        d["uri"] = item["track"]["uri"]
-        d["duration"] = item["track"]["duration_ms"]
-        dl_recently.append(d)
-    return(pd.DataFrame(dl_recently))
+        d["popularity"] = item["track"]["popularity"]   # Get the popularity
+        d["uri"] = item["track"]["uri"]             # Get the track URI
+        d["duration"] = item["track"]["duration_ms"]    # Get duration of the track
+        dl_recently.append(d)                           # Append to the list
+    return(pd.DataFrame(dl_recently))               # Return the dataframed list
 
 
 # %%  Get "a" playlist tracks
@@ -41,17 +41,18 @@ def playlist_to_df(sp, playlist_id: str):
     """
     Get a songs in a specific playlist.
      - Input:  
-         1. sp = spotify authorization call
-         2. Spotify link (ID, URI or URL)
+        - sp: Spotify authorization object (base/user)
+        - playlist_id: Playlist string either **ID**, **URI** or **URL** 
      - Output: Pandas dataframe
      
     NOTE: 
-    Public playlist can use basic authentication.
-    Private user playlist need user authentication.
+    Public playlists only require basic authentication ( see: https://spotipy.readthedocs.io/en/2.22.1/#client-credentials-flow ).
+    Private playlists require user authentication ( see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 ).
     
-    # example:
-    playlist = user_playlist_to_df(sp, "37i9dQZF1DXaWf8ZIHreXF") # spotify "Dance Hits 2010s"
+    # Example:
+    playlist = user_playlist_to_df(sp, "37i9dQZF1DXaWf8ZIHreXF") # Spotify "Dance Hits 2010s"
     """
+    
     playlist_tracks = sp.playlist_tracks(playlist_id)  # 2022 playlist
 
     dl_playlist = []
@@ -74,12 +75,12 @@ def playlist_to_df(sp, playlist_id: str):
 def top_artists_df(sp):
     """
     Get users top artists.
-     - Input:  
-         1. sp = spotify authorization call
+    - Input:  
+        - sp: Spotify authorization object (user)
      - Output: Pandas dataframe
     
     NOTE:
-    This function requires user authentication access! 
+    This function requires user authentication object (see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 ) 
         
     # Example:
     top_artists = user_top_artists_df(sp)
@@ -98,16 +99,17 @@ def top_artists_df(sp):
 
 
 # %%   Top tracks
-def top_tracks_df(sp, limit: int = 50, time_range = str):
+def top_tracks_df(sp, limit: int = 50, time_range: str = "medium_term"):
     """
     Get users top tracks.
-     - Input:  
-         1. sp = spotify authorization call
-         2. Amount of top tracks
+    - Input:  
+        - sp: Spotify authorization object (user)
+        - limit: Amount of top tracks (max 50)
+        - time_range: Period of time (short_term = 4 weeks; medium_term = 6 months; long_term = several years)
      - Output: Pandas dataframe
     
     NOTE:
-    This function requires user authentication access! 
+    This function requires user authentication object ( see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 )
     
     # Example:
     top_tracks = user_top_tracks_df(sp)
@@ -130,22 +132,26 @@ def top_tracks_df(sp, limit: int = 50, time_range = str):
 
 
 # %%  Get song analysis
-def track_analysis_to_df(sp, audio_uri_list: list):
+def track_analysis_to_df(sp, audio_list: list, str):
     """
-    Do an audio analysis of a list of songs (ID, URI, URL)
-     (Can be of a single song, but needs to be given in a list)
+    Get raw audio analysis of a list of songs (ID, URI, URL)
+    (Can be of a single song, but needs to be given in a list)
      - Input:  
-         1. sp = spotify authorization call
-         2. List of song (ID, URI or URL)
+        - sp: Spotify authorization object (base/user)
+        - audio_list: List or string of **ID**, **URI** or **URL** 
      - Output: Pandas dataframe
-     
-        
+    
+    NOTE:
+    Either authentication object work.
+        (base: https://spotipy.readthedocs.io/en/2.22.1/#client-credentials-flow ; 
+         user: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 )
+    
     # Example:
     track_analysis = track_analysis_to_df(sp, <my_top_tracks["uri"]>)
     """
     
     data_list = []  # where we put our informatio
-    for enu, song in enumerate(audio_uri_list):  # For each
+    for enu, song in enumerate(audio_list):  # For each
         analysis = sp.audio_analysis(song)
         for enu2, item in enumerate(analysis["segments"]):
             d = {}
@@ -154,7 +160,6 @@ def track_analysis_to_df(sp, audio_uri_list: list):
             d["time"]           = item["duration"]
             d["loudness_time"]  = item["loudness_max_time"]
             d["loudness_max"]   = item["loudness_max"]
-           # d["loudness_end"]    =  item["loudness_end"] # doesnt add anything apparently
             d["pitch-1"]        = item["pitches"][0]
             d["pitch-2"]        = item["pitches"][1]
             d["pitch-3"]        = item["pitches"][2]

@@ -10,6 +10,10 @@ The script checks if the data is saved in the local "data" folder and retreives 
 
 The data consists of both the my and the worlds top songs (100 and 50 respectively) and data regarding the features of each playlist. 
 
+For the visualizing part below, only the data "my_top_tracks_2022.csv", "my_top_tracks_2022_features.csv", "top_tracks_world_2022.csv" and "top_tracks_world_2022.csv" are used. Although some additional data can be fond there
+
+All plots should be reproducible by cloning the repositry and running the script. It is important to change the working directory to where you have saved the clone. From there, the data should automatically be loaded, and three plots should be generated. 
+
 ## Visualizing
 For the visualizing part, we plot the track feautres of each playlist against each other.
 
@@ -26,3 +30,26 @@ Relevant transformations of the data take place before visualizing. Such as remo
 ### Third plot
 
 
+## Extra Functions:
+In the "lib" folder there is a script containing some extra functions to get out data to a dataframe 
+- last_played_df
+	- Input: sp
+	- Get the last (50) played songs and add them to a dataframe (pandas).
+	- Require spotify user authentication call (typically "sp")
+- playlist_to_df
+	- Input: playlist(id, uri or url) 
+	- Get a specific playlist and put it in a dataframe.
+	- Require base spotify authentication for public playlists or user authentication for private playlists (typically "sp").
+- top_artists_df
+	- Input: sp
+	- Get the top artists of the current authenticated user and put it in a dataframe.
+	- Require user authentication call (typically "sp").
+- top_tracks_df
+	- Input: sp (OPTIONAL: limit, time_range) 
+		- time_range can be either "long_term", "middle_term" or "short_term".
+	- Get the top tracks of the current authenticated user and put it in a dataframe.
+	- Require user authentication call (typically "sp").
+- track_analysis_to_df
+	- Input: sp, list(id, uri or url)
+	- Get raw audio analysis and put it in a dataframe.
+	- Require either base 

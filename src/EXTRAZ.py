@@ -156,6 +156,24 @@ sb.relplot(my_top_song_features, x = "culminative_time", y = "timbre-3", kind="l
 ### ---
 """
 
+
+"""
+# double plotting in matplotlib: https://matplotlib.org/stable/gallery/lines_bars_and_markers/cohere.html#sphx-glr-gallery-lines-bars-and-markers-cohere-py
+# https://stackoverflow.com/a/8228808
+ - plt.cla() clears an axis, i.e. the currently active axis in the current figure. It leaves the other axes untouched.
+ - plt.clf() clears the entire current figure with all its axes, but leaves the window opened, such that it may be reused for other plots.
+ - plt.close() closes a window, which will be the current window, if not specified otherwise.
+
+# Thus we can make ONE FIGURE, ADD TO IT (ax) and clear it! 
+
+Why am i missing help information on "ax" variable:
+    lookup: https://matplotlib.org/stable/api/axes_api.html#basic
+# to interpret features of track analysis: 
+# https://developer.spotify.com/documentation/web-api/reference/#/operations/get-several-audio-features
+
+# compare my music features to top 50 of norway ?
+# https://open.spotify.com/playlist/37i9dQZEVXbJvfa0Yxg7E7?si=94da68a1315a418f
+"""
 # %% VISUALIZE #### 
 plt.show()
 
