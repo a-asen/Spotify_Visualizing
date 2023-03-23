@@ -1,4 +1,4 @@
 #*json
-access/*.json
-.cache*
-src/.cache*
+access/access_token.json
+.cache
+src/.cache
