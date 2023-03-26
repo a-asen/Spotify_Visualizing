@@ -4,12 +4,11 @@
 - [x] make culminative time ! so we can see whe nin the song we are lookin at 
 
 """
-# %% Quick run
-#### Set environment
+####        Packages
 import os
-test = os.path.abspath(__file__) # get location of this script
-os.chdir(os.path.dirname(os.path.dirname(test))) # change the working directory to two levels above file
-print(os.getcwd())  # get change
+# This should enable us to run this script form anywhere and it should automatically set 
+# the working directory to the correct path. 
+os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
 
 #### Load Packages
 import json
@@ -18,52 +17,78 @@ import spotipy
 import matplotlib.pyplot as plt
 import numpy as np
 import seaborn as sb
+import scipy.stats as s
 import lib.spotify_to_df as lib #local library
     # lib.top_tracks_df(sp) 
     # https://codeigo.com/python/import-function-from-file # better & more
     # https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
 
-#### Read Keys & accessories
-with open("access/access_token.json", "r") as f: # Get client ID and secret
-    access_token = json.load(f)
+
+#######################         TOGGLES            ############################
+skip_authorization = True
+    # We do not need to setup any authentication given that the data is available. 
+    # For this reason "skip_authorization" is set to true. 
+
+spotify_basic_authorisation = True  
+# False to get "private", or personalized data (e.g., top artists/tracks)   
+    # I needed "user authentication" in order to get my "top 2022" playlist. 
+    # It is not possible for others "user authentication" to get my private playlists
+    # and so basic authorisation is enough 
+
+boxplot_include_all = False  # Enabeling this to true will give 2 more graphed values
 
 
-# Redirect link:
-sp_redirect = "http://localhost:8888/callback"
-# Scopes (things we want to access - the "scope of our acccess")
-sp_scopes = "user-read-playback-state,user-read-currently-playing,user-read-playback-position,user-top-read,user-read-recently-played,playlist-read-private,playlist-read-collaborative"
-
-# https://developer.spotify.com/documentation/general/guides/authorization/scopes/
-# https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
-
-#### User Authentication
-# https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
-sp_user_auth = spotipy.SpotifyOAuth(
-    client_id       =  access_token["Client_ID"],     # client ID
-    client_secret   =  access_token["Client_Secret"], # Secret
-    redirect_uri    =  sp_redirect,                   # redirect to....
-    scope           =  sp_scopes)                     # access scope
-
-#sp_user_auth.get_auth_response()
-
-#### Authentication Call
-# Set the "auth_manager" to our credentials according to the given "auth" access
-# https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
-# We set our access point to "sp" by authorizing with "sp_user_auth"
-
-sp = spotipy.Spotify(auth_manager = sp_user_auth)
-
-#sp_user_auth.get_auth_response() # these should authorize if it doesnt happen automatically
-#sp_user_auth.get_authorization_code()
-
-####  Read  //  Get data
-
-# NO NEED TO LOAD THE API UNNECESSARIY
-# Check if we have stored the data
-# Else get and save the data 
 
 ###############################################################################
-##########                WORLD TOP TRACKS 2022!                  #############
+####          Setup Spotify API calls 
+# Read keys
+with open("access/access_token.json", "r") as f:
+    access_token = json.load(f)
+
+if skip_authorization == False: 
+    if spotify_basic_authorisation == False: 
+    # If we do NOT use basic authentication, we set up the authorization calls according to this:
+        sp_redirect = "http://localhost:8888/callback"  # Set redirect link
+        # Scopes (things we want to access - the "scope of our acccess")
+        # backslash (\) breaks the line, making it easier to read.
+        sp_scopes = "user-read-playback-state,user-read-currently-playing, \
+        user-read-playback-position,user-top-read,user-read-recently-played, \
+        playlist-read-private,playlist-read-collaborative"
+        
+        # https://developer.spotify.com/documentation/general/guides/authorization/scopes/
+        # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
+        
+        #### User Authentication
+        # https://spotipy.readthedocs.io/en/2.22.1/#spotipy.oauth2.SpotifyOAuth.__init__
+        sp_user_auth = spotipy.SpotifyOAuth(
+            client_id       =  access_token["Client_ID"],     # client ID
+            client_secret   =  access_token["Client_Secret"], # Secret
+            redirect_uri    =  sp_redirect,                   # redirect to....
+            scope           =  sp_scopes)                     # access scope
+    
+        #sp_user_auth.get_auth_response() # these should authorize if it doesnt happen automatically
+        #sp_user_auth.get_authorization_code()
+        
+        #### Authentication Call
+        # Set the "auth_manager" to our credentials according to the given "auth" access
+        # https://developer.spotify.com/documentation/general/guides/authorization/code-flow/
+        # We set our access point to "sp" by authorizing with "sp_user_auth"
+        
+        sp = spotipy.Spotify(auth_manager = sp_user_auth) # set our authorization calls
+        
+    else: # if not, set to basic authorization
+        sp = spotipy.Spotify(auth_manager = spotipy.oauth2.SpotifyClientCredentials(
+            client_id = access_token["Client_ID"],
+            client_secret = access_token["Client_Secret"]))
+    
+###############################################################################
+####                      Read  //  Get data
+
+#           NO NEED TO LOAD THE API UNNECESSARIY
+# We check if we have the data stored in a .csv file and read it.
+# IF NOT, we do API calls to get the data and store it in the "data" folder 
+
+#########             WORLD TOP TRACKS 2022!             ##############
 ### world top tracks 2022 (wtt22)
 # only come with top 50 tracks
 if os.path.exists("data/top_tracks_world_2022.csv"):
@@ -73,7 +98,7 @@ else:
     wtt22 = wtt22.set_index(wtt22.index + 1)      # set new index
     wtt22.to_csv("data/top_tracks_world_2022.csv")
 
-############            World top tracks 2022 FEATURES           ##############
+##########          World top tracks 2022 FEATURES       ##############
 if os.path.exists("data/top_tracks_world_2022_features.csv"):
     wtt22f = pd.read_csv("data/top_tracks_world_2022_features.csv", index_col = 0)
 else:
@@ -84,8 +109,7 @@ else:
     wtt22f.to_csv("data/top_tracks_world_2022_features.csv")
 
 
-###############################################################################
-########                My Top Tracks 2022 (mtt22)                 ########## 
+########            My Top Tracks 2022 (mtt22)           ############# 
 # 
 if os.path.exists("data/my_top_tracks_2022.csv"):
     mtt22 = pd.read_csv("data/my_top_tracks_2022.csv", index_col = 0)
@@ -94,7 +118,7 @@ else:
     mtt22 = mtt22.set_index(mtt22.index + 1)      # set new index
     mtt22.to_csv("data/my_top_tracks_2022.csv")
 
-########             My Top Tracks 2022 Features (mtt22f)            ##########
+########          My Top Tracks 2022 Features (mtt22f)    #############
 if os.path.exists("data/my_top_tracks_2022_features.csv"):
     mtt22f = pd.read_csv("data/my_top_tracks_2022_features.csv", index_col = 0)
 else:
@@ -105,96 +129,153 @@ else:
     mtt22f.to_csv("data/my_top_tracks_2022_features.csv")
 
 
-########################
-#### ||||   Graph   ||||
-########################
+###############################################################################
+####                 Graph       
 # %% Lineplot 
-fig1, ax1 = plt.subplots()
+fig1, ax1 = plt.subplots() # Create a plot
 
-#### Data shorthand 
-lineplot_my = mtt22f.iloc[0:20,]
+# Subsetting data: 
+    # We use only top 20 of world and my songs from 2022
+lineplot_my = mtt22f.iloc[0:20,]        
 lineplot_world = wtt22f.iloc[0:20,]
 
-plt.figure(1)
-# DATA PLOTTING
+# Plot the data
 #  https://www.color-hex.com/color/00a170
-ax1.plot(lineplot_my.index, lineplot_my["danceability"], c ="#32b38c", linewidth = 3)
-ax1.plot(lineplot_world.index, lineplot_world["danceability"], c ="red", linewidth = 2, linestyle = "dotted")
+ax1.plot(lineplot_world.index, lineplot_world["danceability"], c ="#FF0000", linewidth = 3, linestyle = "dotted")
+ax1.plot(lineplot_my.index, lineplot_my["danceability"], c ="#228B22", linewidth = 4)
 
 ####   ax1 CHANGES
-ax1.set_facecolor("lightgrey")
-ax1.grid()
-ax1.set_yticks(np.arange(0.4,1,0.05))
-ax1.set_xticks(np.arange(1,21,1))
-plt.ylim(0.4,0.95) # https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
-plt.xlim(1,20)  # but why plt and not ax1/fig?
+ax1.set_facecolor("lightgrey")      # gray background
+ax1.grid()                              # add a grid
+ax1.set_yticks(np.arange(0.4,1,0.05))   # new ticks for the y axis
+ax1.set_xticks(np.arange(1,21,1))       # new ticks for the x axis
+plt.ylim(0.4,0.95)                      # limit the y axis 
+# https://www.geeksforgeeks.org/matplotlib-pyplot-ylim-in-python/
+plt.xlim(1,20)                          # Limit the x axis
 
 # INFO
-fig1.legend(loc = "right", labels = ["My Top 20","World Top 20"])
-ax1.set_title("Danceability", size = 16)
+fig1.legend(loc = "right", labels = ["World Top 20","My Top 20"],)  # legend 
+ax1.set_title("Danceability of the top 20 tracks for each playlist", size = 22) # heading
 
-ax1.set_xlabel("Song rank", size = 12)
-ax1.set_ylabel("Danceability score", size = 12)
+ax1.set_xlabel("Song rank", size = 16)      # X title
+ax1.set_ylabel("Danceability score", size = 16)   # Y title
+ax1.tick_params(labelsize = 12)   # increase x/y tick labels
 
 # %%  BOXPLOT
 #### Data
-# My data
-boxplot_my = mtt22f.iloc[0:50]
-boxplot_my = boxplot_my.reset_index() # index column
-boxplot_my = boxplot_my.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness", "loudness"])
-boxplot_my = pd.melt(frame = boxplot_my,
-             id_vars = "index", value_vars = boxplot_my.columns[0:14], 
-             var_name = "variable", value_name = "value")
+if boxplot_include_all == True: # If we include two more features (loudness and instrumentalness)
+    drop = ["mode", "key", "uri", "duration_ms", "time_signature", "tempo"]
+else:
+    drop = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness", "loudness"]
 
-means = boxplot_my.groupby("variable")["value"].mean().reset_index()
-means = means.sort_values("value")
-boxplot_my["variable"] = boxplot_my["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
-boxplot_my = boxplot_my.sort_values("variable")
-boxplot_my["from"] = "My top"
+# My data
+sub_my = mtt22f.iloc[0:50]  # subset songs
+boxplot_my = sub_my.reset_index() # create an index column
+# remove useless columns 
+boxplot_my = boxplot_my.drop(columns = drop)
+stats_tests = boxplot_my.columns[1:len(boxplot_my)] # used for later tests
+if "loudness" in boxplot_my.columns: # if loudness is in the columns, transform it
+    # First we transform the negative "loudness" values to positive by taking the absolute power
+    # Then we take the logarithmic value of it to fit it neatly into our boxplot. 
+    # This should preserve the actual value but still make it plottable for our case. 
+    boxplot_my["loudness"] = np.log10(abs(boxplot_my["loudness"])) # for plotting
+    sub_my["loudness"] = np.log10(abs(sub_my["loudness"])) # for stats
+# Collapse the wide dataframe to a long dataframe (for plotting the data) 
+boxplot_my = pd.melt(frame = boxplot_my,
+             id_vars = "index",  # Each values is indexed by "index"
+             value_vars = boxplot_my.columns[0:14],  # all the values we are collapsing by
+             var_name = "variable",     # The names of each variable is stored under "variable"
+             value_name = "value")      # The values of each datapoint is stored under "value"
+boxplot_my["from"] = "My top" # creating a new row, used to distinguish my and world data 
+
+# # We want to order the layout of each category (e.g., danceability) according to some order (acending/decending)
+# # for this we need to know their average values
+# means = boxplot_my.groupby("variable")["value"].mean().reset_index()  
+# means = means.sort_values("value")   # The we order them
+# # Then we take these values and order the "variable" according to this by 
+# # creating an ordered categorical variable (that is the "variable")
+# boxplot_my["variable"] = boxplot_my["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+# # From that we can then sort the variable. 
+# boxplot_my = boxplot_my.sort_values("variable")
 
 # World data
-boxplot_world = wtt22f.iloc[0:50]
-boxplot_world = boxplot_world.reset_index() # index column
-boxplot_world = boxplot_world.drop(columns = ["mode", "key", "uri", "tempo", "duration_ms", "time_signature", "instrumentalness", "loudness"])
-#boxplot_world["loudness"] = np.log10(np.sqrt(boxplot_world["loudness"]**2))
+# same procedure as above, for the world data
+sub_world = wtt22f
+boxplot_world = sub_world.reset_index() 
+boxplot_world = boxplot_world.drop(columns = drop)
+if "loudness" in boxplot_world.columns: 
+    boxplot_world["loudness"] = np.log10(abs(boxplot_world["loudness"]))
+    sub_world["loudness"] = np.log10(abs(sub_world["loudness"]))
 boxplot_world = pd.melt(frame = boxplot_world,
              id_vars = "index", value_vars = boxplot_world.columns[0:14], 
              var_name = "variable", value_name = "value")
-
-means = boxplot_world.groupby("variable")["value"].mean().reset_index()
-means = means.sort_values("value")
-boxplot_world["variable"] = boxplot_world["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
-boxplot_world = boxplot_world.sort_values("variable")
 boxplot_world["from"] = "World top"
 
-dp3 = pd.concat([boxplot_my, boxplot_world], axis = 0)
+# means = boxplot_world.groupby("variable")["value"].mean().reset_index()
+# means = means.sort_values("value")
+# boxplot_world["variable"] = boxplot_world["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+# boxplot_world = boxplot_world.sort_values("variable")
 
+# We then combine these two dataframes in one long dataframe
+dp3 = pd.concat([boxplot_my, boxplot_world], axis = 0) 
 
-###  VIOLIN PLOT -- 
-# plt.cla()
-# sb.violinplot(dp3, y = "variable", x = "value", hue = "from", width = 1)
+means = dp3.groupby("variable")["value"].mean().reset_index() #
+names = means = means.sort_values("value")
+dp3["variable"] = dp3["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+dp3 = dp3.sort_values("variable")
+dp3
 
-#### BOXPLOT -- Figure information
-fig2, ax2 = plt.subplots()
-plt.figure(2)
+# visualizing
+fig2, ax2 = plt.subplots()  # new plot
+# plotting the data:
+    # We want to plot each "variable" according to the "value" they correspond to
+    # split by where they are "from" (i.e., my playlist or the world playlist)
 ax2 = sb.boxplot(dp3, y = "variable", x = "value", hue = "from", dodge = True, ax=ax2)
-sb.despine(trim = True, ax=ax2)
-ax2.grid(axis = "x", alpha = .7, linestyle = "solid") 
+sb.despine(trim = True, ax=ax2)  # simplify the graph, removes a couple of lines
+ax2.grid(axis = "x", alpha = .7, linestyle = "solid")  # lines from the x axis
 ax2.set_axisbelow(True) # draw lines behind
-ax2.set_xticks(np.arange(0.0,1.1,0.1))
+ax2.set_xticks(np.arange(0.0,1.1,0.1))  # new ticks for the x axis
 
-ax2.set_xlabel("Percent confidence", size = 16, labelpad = 16)
-#fig2.suptitle("Music features over 'My top' and 'World top' tracks", size = 22)
-ax2.set_title("Music features over 'My top' and 'World top' tracks", size = 22, pad = 18) # 
+# Graph information:
+# title
+ax2.set_title("Music features over 'My top' and 'World top' tracks", size = 22, pad = 18)
+# x/y labels
+ax2.set_xlabel("Percent confidence", size = 16, labelpad = 16) 
+ax2.set_ylabel("")  # remove useless label
 
-ax2.legend(title = "", fontsize = 12) 
-ax2.set_yticklabels(["Instrumentalness", "Speechiness", "Acousticness", "Liveness", "Valence", "Danceability", "Energy"])
-ax2.set_xticklabels(np.arange(0,101,10))
+ax2.legend(title = "", fontsize = 12)  # remove legend title & increase size
 
-#ax2.tick_params(labelsize = 12) 
+# fixup ytick labels
+ax2.set_yticklabels(names["variable"].str.capitalize()) 
+ax2.set_xticklabels(np.arange(0,101,10)) # new x ticks labels in percent form 
+
+ax2.tick_params(labelsize = 12)  # increase x/y tick size
+
+####  Quick stats
+l = []
+for item in means["variable"]:
+    d = {}
+    d["item"] = item
+    d["my_mean"] = np.mean(sub_my[item])
+    d["world_mean"] = np.mean(sub_world[item])
+    d["diff"] = d["my_mean"] - d["world_mean"]
+    ttest, pval = s.ttest_ind(mtt22f[item], wtt22f[item])
+    d["ttest"] = ttest
+    d["pval"] = pval
+    l.append(d)
+
+#s.ttest_ind(mtt22f["instrumentalness"], wtt22f["instrumentalness"])
+# np.mean(mtt22f["instrumentalness"]) # np.mean(wtt22f["instrumentalness"]) #
+
+
+table = pd.DataFrame(l) # copy to word. 
+# Could make this as a matplot table, but is less flexible 
+# fig3, ax3 = plt.subplots()
+# ax3.axis("off")
+# ax3.table(cellText = table.values, colLabels = table.columns, loc = "center")
+
 
 #%%  CORRELATION
-import scipy.stats as s
 fig3, ax3 = plt.subplots()
 
 dp = mtt22f[0:50]
