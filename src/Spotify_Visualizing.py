@@ -23,7 +23,6 @@ import lib.spotify_to_df as lib #local library
     # https://codeigo.com/python/import-function-from-file # better & more
     # https://stackoverflow.com/questions/20309456/how-do-i-call-a-function-from-another-py-file
 
-
 #######################         TOGGLES            ############################
 skip_authorization = True
     # We do not need to setup any authentication given that the data is available. 
@@ -36,7 +35,6 @@ spotify_basic_authorisation = True
     # and so basic authorisation is enough 
 
 boxplot_include_all = False  # Enabeling this to true will give 2 more graphed values
-
 
 
 ###############################################################################
