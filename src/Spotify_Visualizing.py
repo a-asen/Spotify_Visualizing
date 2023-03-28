@@ -28,7 +28,7 @@ skip_authorization = True
     # We do not need to setup any authentication given that the data is available. 
     # For this reason "skip_authorization" is set to true. 
 
-spotify_basic_authorisation = True  
+spotify_basic_authorization = True  
 # False to get "private", or personalized data (e.g., top artists/tracks)   
     # I needed "user authentication" in order to get my "top 2022" playlist. 
     # It is not possible for others "user authentication" to get my private playlists
@@ -36,6 +36,8 @@ spotify_basic_authorisation = True
 
 boxplot_include_all = False  # Enabeling this to true will give 2 more graphed values
 
+save_figures = False  # Default is "False"
+    # I do not want to override my own, already exisiting figure
 
 ###############################################################################
 ####          Setup Spotify API calls 
@@ -44,7 +46,7 @@ with open("access/access_token.json", "r") as f:
     access_token = json.load(f)
 
 if skip_authorization == False: 
-    if spotify_basic_authorisation == False: 
+    if spotify_basic_authorization == False: 
     # If we do NOT use basic authentication, we set up the authorization calls according to this:
         sp_redirect = "http://localhost:8888/callback"  # Set redirect link
         # Scopes (things we want to access - the "scope of our acccess")
@@ -152,13 +154,20 @@ plt.ylim(0.4,0.95)                      # limit the y axis
 plt.xlim(1,20)                          # Limit the x axis
 
 # INFO
-fig1.legend(loc = "right", labels = ["World Top 20","My Top 20"],)  # legend 
+fig1.legend(loc = "right", labels = ["World Top 20","My Top 20"], fontsize = 14)  # legend 
 ax1.set_title("Danceability of the top 20 tracks for each playlist", size = 22) # heading
 
 ax1.set_xlabel("Song rank", size = 16)      # X title
 ax1.set_ylabel("Danceability score", size = 16)   # Y title
-ax1.tick_params(labelsize = 12)   # increase x/y tick labels
+ax1.tick_params(labelsize = 14)   # increase x/y tick labels
 
+fig1.set_size_inches(14,8) 
+fig1.subplots_adjust(left =.06,right=.87,top=.95, bottom = .07)
+
+if os.path.exists("fig/"):
+    
+else:
+    fig1.savefig("test2.png")
 # %%  BOXPLOT
 #### Data
 if boxplot_include_all == True: # If we include two more features (loudness and instrumentalness)
@@ -186,16 +195,6 @@ boxplot_my = pd.melt(frame = boxplot_my,
              value_name = "value")      # The values of each datapoint is stored under "value"
 boxplot_my["from"] = "My top" # creating a new row, used to distinguish my and world data 
 
-# # We want to order the layout of each category (e.g., danceability) according to some order (acending/decending)
-# # for this we need to know their average values
-# means = boxplot_my.groupby("variable")["value"].mean().reset_index()  
-# means = means.sort_values("value")   # The we order them
-# # Then we take these values and order the "variable" according to this by 
-# # creating an ordered categorical variable (that is the "variable")
-# boxplot_my["variable"] = boxplot_my["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
-# # From that we can then sort the variable. 
-# boxplot_my = boxplot_my.sort_values("variable")
-
 # World data
 # same procedure as above, for the world data
 sub_world = wtt22f
@@ -209,19 +208,18 @@ boxplot_world = pd.melt(frame = boxplot_world,
              var_name = "variable", value_name = "value")
 boxplot_world["from"] = "World top"
 
-# means = boxplot_world.groupby("variable")["value"].mean().reset_index()
-# means = means.sort_values("value")
-# boxplot_world["variable"] = boxplot_world["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
-# boxplot_world = boxplot_world.sort_values("variable")
-
 # We then combine these two dataframes in one long dataframe
 dp3 = pd.concat([boxplot_my, boxplot_world], axis = 0) 
 
+# We want to order the layout of each category (e.g., danceability) according to some order (acending/descending)
+# for this we need to know their average values
 means = dp3.groupby("variable")["value"].mean().reset_index() #
 names = means = means.sort_values("value")
+# Then we take these values and order the "variable" according to this by 
+# creating an ordered categorical variable (that is the "variable")
 dp3["variable"] = dp3["variable"].astype(pd.CategoricalDtype(categories = means["variable"], ordered = True))
+# From that we can then sort the variable. 
 dp3 = dp3.sort_values("variable")
-dp3
 
 # visualizing
 fig2, ax2 = plt.subplots()  # new plot
@@ -265,7 +263,6 @@ for item in means["variable"]:
 #s.ttest_ind(mtt22f["instrumentalness"], wtt22f["instrumentalness"])
 # np.mean(mtt22f["instrumentalness"]) # np.mean(wtt22f["instrumentalness"]) #
 
-
 table = pd.DataFrame(l) # copy to word. 
 # Could make this as a matplot table, but is less flexible 
 # fig3, ax3 = plt.subplots()
@@ -278,47 +275,30 @@ fig3, ax3 = plt.subplots()
 
 dp = mtt22f[0:50]
 dp2 = wtt22f
-dp["loudness"] = np.log10(np.sqrt(dp["loudness"]**2))
-dp2["loudness"] = np.log10(np.sqrt(dp2["loudness"]**2))
 dp = dp.drop(columns = ["key", "mode", "uri","tempo","duration_ms","time_signature"])
 
 df = dp.corr() # create a correlation matrix
+df.columns = dp.columns.str.capitalize().to_list() # change x names
+df.index = dp.columns.str.capitalize().to_list() # change y namse
 
-mask = np.triu(np.ones_like(df, dtype=bool))         # mask (only half of all corrs)
-cmap = sb.diverging_palette(230, 20, as_cmap=True)   # colour map
-
+mask = np.triu(np.ones_like(df, dtype = bool))         # mask (only half of all corrs)
+cmap = sb.diverging_palette(220, 10, as_cmap = True)   # colour map 
 plt.clf()
-ax3 = sb.heatmap(df, mask = mask, cmap = cmap, linewidths=.5, annot = True,)
-ax3.xaxis.tick_top() # Flip to top
-plt.xticks(rotation=25) # rotate
-ax3.grid(which="minor")
-
-
 #%%
-#####
-plt.plot(dp.index[0:21], dp["loudness"][0:21],) # plot loudness on a graph? 
-dp.columns
-dp.corr() # LUL that was easy 
-dp.columns
-s.pearsonr(dp["loudness"], dp["energy"])
-s.pearsonr(dp["loudness"], dp["danceability"])
-s.pearsonr(dp["loudness"], dp["speechiness"])
-s.pearsonr(dp["loudness"], dp["valence"])
-s.pearsonr(dp["loudness"], dp["instrumentalness"])
-s.pearsonr(dp["loudness"], dp["liveness"])
-s.pearsonr(dp["loudness"], dp["tempo"])
-
-
-plt.scatter(dp["energy"], dp["loudness"])
-plt.scatter(dp["energy"], dp["danceability"])
-
-plt.plot(dp["energy"], )
-#######
-
-
-
-
-
+ax3 = sb.heatmap(df, mask = mask, cmap = cmap, linewidths=1, annot = True, 
+                square=True,
+                 annot_kws = {"fontsize":14}, )
+                 #cbar_kws = {"aspect": 20, "labelsize": 14})
+ax3.xaxis.tick_top() # Flip to top
+plt.xticks(rotation = 20) # rotate
+plt.yticks(rotation = 20) # rotate
+ax3.tick_params(labelsize = 14)
+# help(ax3.collections[0].colorbar)
+# dir(ax3.collections[0].colorbar)
+# ax3.collections[0].colorbar.set_ticklabels("fontsize" == 20 )#:{"fontsize":14})
+# ax3.tick_params(labelsize=14)
+fig3.savefig("test.png")
+fig.save("test.png")
 
 
 
