@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 import pandas as pd
-
+import numpy as np
+import scipy.stats as s
 
 # %%  Get Recently Played
 # https://developer.spotify.com/documentation/web-api/reference/#/operations/get-recently-played
@@ -10,7 +11,7 @@ def last_played_df(sp, limit: int = 50): # https://stackoverflow.com/questions/6
     - Input: 
         - sp: Spotify authorization object (user)
         - limit: Amount of tracks to retrieve (max 50)
-     - Output: Pandas Dataframe 
+     - Output: Pandas data frame 
     
     NOTE:
     This function require user authentication object ( see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 ) 
@@ -43,7 +44,7 @@ def playlist_to_df(sp, playlist_id: str):
      - Input:  
         - sp: Spotify authorization object (base/user)
         - playlist_id: Playlist string either **ID**, **URI** or **URL** 
-     - Output: Pandas dataframe
+     - Output: Pandas data frame
      
     NOTE: 
     Public playlists only require basic authentication ( see: https://spotipy.readthedocs.io/en/2.22.1/#client-credentials-flow ).
@@ -77,7 +78,7 @@ def top_artists_df(sp):
     Get users top artists.
     - Input:  
         - sp: Spotify authorization object (user)
-     - Output: Pandas dataframe
+     - Output: Pandas data frame
     
     NOTE:
     This function requires user authentication object (see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 ) 
@@ -106,7 +107,7 @@ def top_tracks_df(sp, limit: int = 50, time_range: str = "medium_term"):
         - sp: Spotify authorization object (user)
         - limit: Amount of top tracks (max 50)
         - time_range: Period of time (short_term = 4 weeks; medium_term = 6 months; long_term = several years)
-     - Output: Pandas dataframe
+     - Output: Pandas data frame
     
     NOTE:
     This function requires user authentication object ( see: https://spotipy.readthedocs.io/en/2.22.1/#module-spotipy.oauth2 )
@@ -139,7 +140,7 @@ def track_analysis_to_df(sp, audio_list: list, str):
      - Input:  
         - sp: Spotify authorization object (base/user)
         - audio_list: List or string of **ID**, **URI** or **URL** 
-     - Output: Pandas dataframe
+     - Output: Pandas data frame
     
     NOTE:
     Either authentication object work.
@@ -188,4 +189,45 @@ def track_analysis_to_df(sp, audio_list: list, str):
     return(pd.DataFrame(data_list))
 
 
+def ttest_to_table(df1, df2, drop: list):
+    """
+    Create a ttest table of all columns between two dataframes. 
+     - Input:  
+        - df1: Data frame 1 
+        - df2: Data frame 2 
+        - column: List of relevant columns to analyse between
+     - Output: Pandas data frame
+    
+    #####
+    Todo:
+    - [ ] get variable name 
+    - [ ] Fall back on columns if column = None 
+    - [ ] Rather get columns we want to test over and not a "drop list"
+        - [ ] Ensure both df contain the same columns 
+    """
+    # var_name = [var for var in inspect.getmembers(
+    # inspect.stack()[0][1]) if id(mtt22f) == id(var[1])][0][0]
+    
+    #if column == None: 
+     
+    # df1.columns == df2.columns
+    
+    # df1_name = str(df1.name)
+    # df2_name = str(df2.name)
+    
+    df1 = df1.drop(columns = drop) 
+    df2 = df2.drop(columns = drop)
 
+    l = []
+    for item in df1.columns.to_list():
+        d = {}
+        d["feature"] = item
+        d["df1"] = np.mean(df1[item])
+        d["df2"] = np.mean(df2[item])
+        d["diff"] = d["df1"] - d["df2"]
+        ttest, pval = s.ttest_ind(df1[item], df2[item])
+        d["ttest"] = ttest
+        d["pval"] = pval
+        l.append(d)
+    
+    return(pd.DataFrame(l)) 

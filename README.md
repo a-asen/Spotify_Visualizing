@@ -13,24 +13,24 @@ The script is currently set up to run immediately and reproduce the figure under
 ## Data
 The script will checks if there is existing data in the "data" folder. This is to be able to use the same data that I use to visualize. 
 If you want your own data you can delete/rename "my_top_tracks_2022.csv" and "my_top_tracks_2022_features.csv". Alternatively you can change the saving/checking names in the script to get your own data. 
-	_* Note: Only "my" data has to be deleted if you compare your own data against the world 2022._
+	_* Note: Only "my" data has to be deleted/renamed/moved if you compare your own data against the world 2022._
 
 The data stored under "data":
-- my top songs (100 tracks) 
+- My top songs (100 tracks) 
     - "my_top_tracks_2022.csv" 
     - "my_top_tracks_2022_features.csv", 
 - World top songs (50 tracks)
     - "top_tracks_world_2022.csv" 
     - "top_tracks_world_features_2022.csv"
-_Extra data is stored under "data/other"_
+- "t-test_table.xlsx" is a saved table
 
 ## Script
 Running the main script "Spotify_Visualizing.py" under the "src" folder should recreate all figures under "fig". 
 It will:
 1. set the working directory relative to the position of the script (meaning you can run the script from "src" and it should all work)
 2. read all the data necessary to create the plots 
-3. create three different plots
-    - These plots should be available under "fig1", "fig2" and "fig3" respectively
+3. create three four plots
+    - These plots should be available under "fig".
 
 ## Visualizing
 We plot the track features of each playlist against each other.
@@ -43,29 +43,38 @@ For the second plot, we look at the general differences across the playlist feat
 
 Relevant transformations of the data are done before the visualizing part. Such as removing uninformative columns and combining the two data frames. 
 
-### Third plot
-
+### Third & fourth plot
+For the third and fourth plot, we create a correlation matrix for each dataset. Each plot looks at the correlations between song features within each playlist.
 
 ## Extra Functions:
-In the "lib" folder, there is a script containing some extra functions that puts data in a data frame, if you want to further explore your own data.
+A function script is found under "lib" and can be accessed with the "lib" shorthand. It contains both functions to get data to a data frame, and some extra functions if you want to further explore your own data/other data. 
 - last_played_df
 	- Input: sp
 	- Get the last (50) played songs and add them to a data frame (pandas).
 	- Require Spotify user authentication call (typically "sp")
+	- Output: Pandas data frame
 - playlist_to_df
 	- Input: playlist(ID, URI or URL) 
 	- Get a specific playlist and put it in a data frame.
 	- Require base Spotify authentication for public playlists or user authentication for private playlists (typically "sp").
+	- Output: Pandas data frame
 - top_artists_df
 	- Input: sp
 	- Get the top artists of the current authenticated user and put it in a data frame.
 	- Require user authentication call (typically "sp").
+	- Output: Pandas data frame
 - top_tracks_df
 	- Input: sp (OPTIONAL: limit, time_range) 
 		- time_range can be either "long_term", "middle_term" or "short_term".
 	- Get the top tracks of the current authenticated user and put it in a data frame.
 	- Require user authentication call (typically "sp").
+	- Output: Pandas data frame
 - track_analysis_to_df
 	- Input: sp, list(ID, URI or URL)
 	- Get raw audio analysis and put it in a data frame.
 	- Require either base 
+	- Output: Pandas data frame
+- ttest_to_table
+	- Input: data frame 1, data frame 2, drop list
+	- Test the difference between each data frame of similar column names
+	- Output: Pandas data frame

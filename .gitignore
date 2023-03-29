@@ -2,3 +2,4 @@
 access/access_token.json
 .cache
 src/.cache
+data/other/*
