@@ -6,6 +6,8 @@ import os
 # This should enable us to run this script form anywhere and it should automatically set 
 # the working directory to the correct path. 
 os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+# stricly speaking, running the file from anywhere should set the working directory to the files path, 
+# and thus only one "path.dirname" is required over the "__file__" 
 
 import json
 import pandas as pd
@@ -23,11 +25,11 @@ skip_authorization = True
     # We do not need to setup any authentication given that the data is available. 
     # For this reason "skip_authorization" is set to true. 
 
-spotify_basic_authorization = True  
+spotify_basic_authorization = True  # only relevant if "skip_authentication is False"
 # False to get "private", or personalized data (e.g., top artists/tracks)   
     # I needed "user authentication" in order to get my "top 2022" playlist. 
     # It is not possible for others "user authentication" to get my private playlists
-    # and so basic authorisation is enough 
+    # and so basic authorisation is enough because the data is saved under the "data" folder
 
 include_all = False  # If True you get two more plotted values 
 
@@ -43,18 +45,22 @@ else:
 
 ###############################################################################
 ####                       Setup Spotify API calls                         ####
-# Read keys
-with open("access/access_token.json", "r") as f:
-    access_token = json.load(f)
-
 if skip_authorization == False: 
-    if spotify_basic_authorization == False: 
+    # Read keys
+    with open("access/access_token.json", "r") as f:
+        access_token = json.load(f)
+
+    if spotify_basic_authorization == True: 
+        sp = spotipy.Spotify(auth_manager = spotipy.oauth2.SpotifyClientCredentials(
+            client_id = access_token["Client_ID"],
+            client_secret = access_token["Client_Secret"]))
+    else:
     # If we do NOT use basic authentication, we set up the authorization calls according to this:
         sp_redirect = "http://localhost:8888/callback"  # Set redirect link
         # Scopes (things we want to access - the "scope of our acccess")
         # backslash (\) breaks the line, making it easier to read.
-        sp_scopes = "user-read-playback-state,user-read-currently-playing, \
-        user-read-playback-position,user-top-read,user-read-recently-played, \
+        sp_scopes = "user-read-playback-state,user-read-currently-playing,\
+        user-read-playback-position,user-top-read,user-read-recently-played,\
         playlist-read-private,playlist-read-collaborative"
         
         # https://developer.spotify.com/documentation/general/guides/authorization/scopes/
@@ -78,11 +84,7 @@ if skip_authorization == False:
         
         sp = spotipy.Spotify(auth_manager = sp_user_auth) # set our authorization calls
         
-    else: # if not, set to basic authorization
-        sp = spotipy.Spotify(auth_manager = spotipy.oauth2.SpotifyClientCredentials(
-            client_id = access_token["Client_ID"],
-            client_secret = access_token["Client_Secret"]))
-    
+
 ###############################################################################
 ####                        Read  //  Get data                            #####
     
@@ -140,7 +142,6 @@ else:
 # %% Line plot run cell
 ###############################################################################
 ####                            Line plot                                  ####       
- 
 fig1, ax1 = plt.subplots() # Create a plot
 
 # Subsetting data: 
@@ -268,14 +269,17 @@ else:
 
 ####  Table statistic 
 table = lib.ttest_to_table(mtt22f.iloc[0:50], wtt22f, drop)
-table.to_excel("data/t-test_table.xlsx")
+if os.path.exists("data/t-test_table.xlsx"):
+    pass
+else:
+    table.to_excel("data/t-test_table.xlsx")
 
 #%%   Correlation matrix run cell
 ###############################################################################
 ####                    Correlation Matrix                                 ####
 ####  Figure 3 - My data
-fig3, ax3 = plt.subplots(figsize = (10,8))  # 
 cmap = sb.diverging_palette(220, 10, as_cmap = True)   # common colorbar palette
+fig3, ax3 = plt.subplots(figsize = (10,8))  # 
 
 dp = mtt22f[0:50]
 dp = dp.drop(columns = drop)
@@ -284,6 +288,7 @@ df.columns = dp.columns.str.capitalize().to_list()  # change x names
 df.index = dp.columns.str.capitalize().to_list()    # change y namse
 
 mask1 = np.triu(np.ones_like(df, dtype = bool))         # mask (only half of all corrs)
+
 ax3 = sb.heatmap(df, mask = mask1, cmap = cmap, linewidths = 1, annot = True,
                  square = True,  # Force squared distances
                  annot_kws = {"fontsize":16}, ) # size of correlation values

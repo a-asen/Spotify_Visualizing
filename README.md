@@ -37,14 +37,20 @@ We plot the track features of each playlist against each other.
 
 ### First plot
 For the first plot, we check the top 20 songs of each playlist and map the "danceability" per track on a line plot. The two datasets were split by colour and line type: green & whole (my data) and orange and dotted (world data)
+![Lineplot](/fig/figure-1_lineplot.png)
 
 ### Second plot
 For the second plot, we look at the general differences across the playlist features of the top 50 tracks (max tracks for the World playlist).
 
 Relevant transformations of the data are done before the visualizing part. Such as removing uninformative columns and combining the two data frames. 
+![Boxplot](/fig/figure-2_boxplot.png)
 
 ### Third & fourth plot
 For the third and fourth plot, we create a correlation matrix for each dataset. Each plot looks at the correlations between song features within each playlist.
+
+| --- | --- |
+| ![My Correlation Matrix](/fig/figure-3_my_corr_matrix.png) | ![World Correlation Matrix](/fig/figure-4_world_corr_matrix.png) |
+
 
 ## Extra Functions:
 A function script is found under "lib" and can be accessed with the "lib" shorthand. It contains both functions to get data to a data frame, and some extra functions if you want to further explore your own data/other data. 
@@ -54,7 +60,7 @@ A function script is found under "lib" and can be accessed with the "lib" shorth
 	- Require Spotify user authentication call (typically "sp")
 	- Output: Pandas data frame
 - playlist_to_df
-	- Input: playlist(ID, URI or URL) 
+	- Input: sp; playlist(ID, URI or URL) 
 	- Get a specific playlist and put it in a data frame.
 	- Require base Spotify authentication for public playlists or user authentication for private playlists (typically "sp").
 	- Output: Pandas data frame
@@ -64,7 +70,7 @@ A function script is found under "lib" and can be accessed with the "lib" shorth
 	- Require user authentication call (typically "sp").
 	- Output: Pandas data frame
 - top_tracks_df
-	- Input: sp (OPTIONAL: limit, time_range) 
+	- Input: sp; (OPTIONAL: limit; time_range)
 		- time_range can be either "long_term", "middle_term" or "short_term".
 	- Get the top tracks of the current authenticated user and put it in a data frame.
 	- Require user authentication call (typically "sp").

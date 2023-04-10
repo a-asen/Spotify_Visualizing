@@ -54,7 +54,7 @@ def playlist_to_df(sp, playlist_id: str):
     playlist = user_playlist_to_df(sp, "37i9dQZF1DXaWf8ZIHreXF") # Spotify "Dance Hits 2010s"
     """
     
-    playlist_tracks = sp.playlist_tracks(playlist_id)  # 2022 playlist
+    playlist_tracks = sp.playlist_tracks(playlist_id)
 
     dl_playlist = []
     for item in playlist_tracks["items"]:
