@@ -48,7 +48,7 @@ Relevant transformations of the data are done before the visualizing part. Such 
 ### Third & fourth plot
 For the third and fourth plot, we create a correlation matrix for each dataset. Each plot looks at the correlations between song features within each playlist.
 
-| | |
+| My Playlist | World Playlist |
 |---|---|
 |![My Correlation Matrix](/fig/figure-3_my_corr_matrix.png) | ![World Correlation Matrix](/fig/figure-4_world_corr_matrix.png) |
 
