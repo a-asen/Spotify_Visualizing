@@ -33,10 +33,9 @@ The data stored under "data":
 ## Script
 Running the main script "Spotify_Visualizing.py" under the "src" folder should recreate all figures under "fig". 
 It will:
-1. set the working directory relative to the position of the script (meaning you can run the script from "src" and it should all work)
-2. read all the data necessary to create the plots 
-3. create three four plots
-    - These plots should be available under "fig".
+1. Read all the data necessary to create the plots 
+2. Create four plots
+    - These plots are available under the "fig" folder.
 
 ## Visualizing
 We plot the track features of each playlist against each other.
