@@ -1,8 +1,14 @@
-# Spotify Project
+# Spotify Visualizing
 
 Repository for exam in course "PSY-3035 - Programming and Data Visualization for Researchers" at UiT - The Arctic University of Norway (https://uit.no/utdanning/emner/emne/785298/psy-3035).
 
-A simple script to visualize the top tracks of the world and for my own data. 
+A repository with simple scripts to visualize Spotify data. 
+
+The script "Spotify_Visualizing" under "src" named can immediately be run to produce the figures under "fig". 
+
+## Citing:
+Aasen, S., R. (2023). GitHub repository, https://github.com/a-asen/Spotify_Visualizing
+
 
 ## Toggles
 The script is currently set up to run immediately and reproduce the figure under "fig". The script has 3 toggles: 

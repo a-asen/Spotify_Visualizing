@@ -5,7 +5,7 @@
 import os
 # This should enable us to run this script form anywhere and it should automatically set 
 # the working directory to the correct path. 
-os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__)))) 
+#os.chdir(os.path.dirname(os.path.dirname(os.path.abspath(__file__))))  # redundant
 # stricly speaking, running the file from anywhere should set the working directory to the files path, 
 # and thus only one "path.dirname" is required over the "__file__" 
 
@@ -31,7 +31,7 @@ spotify_basic_authorization = True  # only relevant if "skip_authentication is F
     # It is not possible for others "user authentication" to get my private playlists
     # and so basic authorisation is enough because the data is saved under the "data" folder
 
-include_all = False  # If True you get two more plotted values 
+include_all = True  # If True you get two more plotted values 
 
 # Not implemented
 #override_figure = False  # Default is "False"
@@ -267,8 +267,9 @@ if os.path.exists("fig/figure-2_boxplot.png"):
 else:
     fig2.savefig("fig/figure-2_boxplot.png")
 
+sub_my
 ####  Table statistic 
-table = lib.ttest_to_table(mtt22f.iloc[0:50], wtt22f, drop)
+table = lib.ttest_to_table(sub_my, sub_world, drop)
 if os.path.exists("data/t-test_table.xlsx"):
     pass
 else:
