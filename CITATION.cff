@@ -2,7 +2,7 @@ cff-version: 1.2.0
 message: "If you use this software, please cite it as below."
 authors:
 - family-names: "Aasen"
-  given-names: "Steffen"
+  given-names: "Steffen Rygg"
 title: "Spotify Visualizing"
 version: 1.0
 date-released: 2023.04.12
