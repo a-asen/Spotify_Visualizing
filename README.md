@@ -7,7 +7,7 @@ A repository with simple scripts to visualize Spotify data.
 The script "Spotify_Visualizing" under "src" named can immediately be run to produce the figures under "fig". 
 
 ## Citing:
-Aasen, S., R. (2023). GitHub repository, https://github.com/a-asen/Spotify_Visualizing
+Aasen, S., R. (2023). Python Data Visualization, https://github.com/a-asen/Spotify_Visualizing
 
 
 ## Toggles
